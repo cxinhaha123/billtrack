@@ -343,17 +343,33 @@ body{
         <input class="form-input" type="date" id="b-date">
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Category</label>
-      <select class="form-input" id="b-cat">
-        <option value="food">🍜 Food & drink</option>
-        <option value="grocery">🛒 Grocery</option>
-        <option value="transport">🚗 Transport</option>
-        <option value="utilities">💡 Utilities</option>
-        <option value="health">💊 Health</option>
-        <option value="entertainment">🎬 Entertainment</option>
-        <option value="other">📦 Other</option>
-      </select>
+    <div class="form-row">
+      <div>
+        <label class="form-label">Category</label>
+        <select class="form-input" id="b-cat">
+          <option value="food">🍜 Food & drink</option>
+          <option value="grocery">🛒 Grocery</option>
+          <option value="transport">🚗 Transport</option>
+          <option value="utilities">💡 Utilities</option>
+          <option value="health">💊 Health</option>
+          <option value="entertainment">🎬 Entertainment</option>
+          <option value="other">📦 Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label">Payment method</label>
+        <select class="form-input" id="b-pay">
+          <option value="applepay">🍎 Apple Pay</option>
+          <option value="tng">💚 TNG eWallet</option>
+          <option value="grabpay">🟢 GrabPay</option>
+          <option value="debit">💳 Debit card</option>
+          <option value="credit">💳 Credit card</option>
+          <option value="cash">💵 Cash</option>
+          <option value="bank">🏦 Bank transfer</option>
+          <option value="boost">⚡ Boost</option>
+          <option value="other">📦 Other</option>
+        </select>
+      </div>
     </div>
     <button class="btn btn-primary" id="add-btn" onclick="addBill()">Add bill</button>
   </div>
@@ -403,7 +419,7 @@ body{
 
 <!-- ALL BILLS TAB -->
 <div id="tab-all" class="content hidden">
-  <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center">
+  <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
     <select class="filter-select" id="filter-cat" onchange="renderAll()" style="flex:1">
       <option value="">All categories</option>
       <option value="food">Food & drink</option>
@@ -412,6 +428,18 @@ body{
       <option value="utilities">Utilities</option>
       <option value="health">Health</option>
       <option value="entertainment">Entertainment</option>
+      <option value="other">Other</option>
+    </select>
+    <select class="filter-select" id="filter-pay" onchange="renderAll()" style="flex:1">
+      <option value="">All methods</option>
+      <option value="applepay">Apple Pay</option>
+      <option value="tng">TNG</option>
+      <option value="grabpay">GrabPay</option>
+      <option value="debit">Debit card</option>
+      <option value="credit">Credit card</option>
+      <option value="cash">Cash</option>
+      <option value="bank">Bank transfer</option>
+      <option value="boost">Boost</option>
       <option value="other">Other</option>
     </select>
     <button class="btn" style="font-size:13px;padding:8px 12px;color:var(--accent);border-color:var(--accent)" onclick="clearAll()">Clear all</button>
@@ -456,6 +484,7 @@ const CAT = {
   other:{label:'Other',color:'#4A4740',bg:'#EBEBEB'}
 };
 const DOT_COLORS = {food:'#2D6A4F',grocery:'#0D6E5B',transport:'#1B4F7A',utilities:'#BA7517',health:'#D4537E',entertainment:'#7F77DD',other:'#888780'};
+const PAY = {applepay:{label:'Apple Pay',icon:'🍎'},tng:{label:'TNG',icon:'💚'},grabpay:{label:'GrabPay',icon:'🟢'},debit:{label:'Debit',icon:'💳'},credit:{label:'Credit',icon:'💳'},cash:{label:'Cash',icon:'💵'},bank:{label:'Bank',icon:'🏦'},boost:{label:'Boost',icon:'⚡'},other:{label:'Other',icon:'📦'}};
 
 function save(){localStorage.setItem('billtrack_v2',JSON.stringify(bills))}
 
@@ -488,6 +517,7 @@ async function addBill(){
   const name=document.getElementById('b-name').value.trim();
   const amount=parseFloat(document.getElementById('b-amount').value);
   const cat=document.getElementById('b-cat').value;
+  const pay=document.getElementById('b-pay').value;
   const date=document.getElementById('b-date').value;
   if(!name||isNaN(amount)||amount<=0){toast('Please enter description and amount');return;}
   const btn=document.getElementById('add-btn');
@@ -501,7 +531,7 @@ async function addBill(){
       ?'✓ Saved to Google Drive — <a href="'+driveLink+'" target="_blank" style="color:var(--accent)">view receipt</a>'
       :'Receipt upload failed — bill saved without attachment.';
   }
-  bills.unshift({id:Date.now(),name,amount,cat,date,driveLink});
+  bills.unshift({id:Date.now(),name,amount,cat,pay,date,driveLink});
   save();
   document.getElementById('b-name').value='';
   document.getElementById('b-amount').value='';
@@ -535,7 +565,7 @@ function billItem(b){
     <div class="bill-dot" style="background:${DOT_COLORS[b.cat]||'#888'}"></div>
     <div class="bill-info">
       <div class="bill-name">${b.name}</div>
-      <div class="bill-meta"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${c.label}</span> · ${fmtDate(b.date)}</div>
+      <div class="bill-meta"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${c.label}</span>${b.pay&&PAY[b.pay]?' · <span style="font-size:11px">'+PAY[b.pay].icon+' '+PAY[b.pay].label+'</span>':''} · ${fmtDate(b.date)}</div>
     </div>
     <div class="bill-amount">${fmtRM(b.amount)}</div>
     ${driveIcon}
@@ -659,7 +689,10 @@ function shareWA(){
 
 function renderAll(){
   const cat=document.getElementById('filter-cat').value;
-  const filtered=cat?bills.filter(b=>b.cat===cat):bills;
+  const pay=document.getElementById('filter-pay').value;
+  let filtered=bills;
+  if(cat)filtered=filtered.filter(b=>b.cat===cat);
+  if(pay)filtered=filtered.filter(b=>b.pay===pay);
   document.getElementById('all-list').innerHTML=filtered.length
     ?filtered.map(billItem).join('')
     :`<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>No bills recorded yet</div>`;
@@ -710,9 +743,10 @@ Extract the following:
 2. "amount": The transaction amount as a plain number (no currency symbol). For Malaysian bank emails look for "MYR XX.XX" or "RM XX.XX". Use the purchase/debit amount, not any fee.
 3. "date": Transaction date in YYYY-MM-DD format. Look for dates in the email header, alert timestamp, or transaction details. If only time is shown use today's date.
 4. "cat": Best guess category — one of: food, grocery, transport, utilities, health, entertainment, other. Infer from merchant name (e.g. restaurant → food, Petronas → transport, pharmacy → health).
+5. "pay": Payment method — one of: applepay, tng, grabpay, debit, credit, cash, bank, boost, other. Infer from context (e.g. Standard Chartered/Maybank/CIMB email → credit or debit, TNG screenshot → tng, GrabPay → grabpay, Apple Pay notification → applepay). Default to "other" if unclear.
 
 Reply ONLY with raw JSON, no markdown, no explanation:
-{"name":"...","amount":0.00,"date":"YYYY-MM-DD","cat":"food"}
+{"name":"...","amount":0.00,"date":"YYYY-MM-DD","cat":"food","pay":"credit"}
 
 Today's date is ${today()}. If anything is truly unclear use: name="Unknown", amount=0, date today, cat="other".`}
           ]}]
@@ -726,6 +760,7 @@ Today's date is ${today()}. If anything is truly unclear use: name="Unknown", am
       if(parsed.amount)document.getElementById('b-amount').value=parsed.amount;
       if(parsed.date)document.getElementById('b-date').value=parsed.date;
       if(parsed.cat){const sel=document.getElementById('b-cat');if([...sel.options].some(o=>o.value===parsed.cat))sel.value=parsed.cat;}
+      if(parsed.pay){const sel=document.getElementById('b-pay');if([...sel.options].some(o=>o.value===parsed.pay))sel.value=parsed.pay;}
       const srcLabel = parsed.name && parsed.name!=='Unknown' ? `<strong>${parsed.name}</strong> — RM ${parsed.amount} detected` : 'Details filled in';
       note.innerHTML='✓ '+srcLabel+' — review then tap <strong>Add bill</strong>.';
     }catch(err){

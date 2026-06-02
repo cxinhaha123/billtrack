@@ -265,6 +265,14 @@ body{
   max-height:200px;
   overflow-y:auto;
 }
+/* Drag and drop */
+.bill-item{transition:opacity 0.15s,transform 0.15s}
+.bill-item.dragging{opacity:0.4;transform:scale(0.98)}
+.bill-item.drag-over{border-top:2px solid var(--accent)}
+.drag-handle{cursor:grab;color:var(--ink3);padding:4px 6px;flex-shrink:0;touch-action:none;display:flex;align-items:center}
+.drag-handle:active{cursor:grabbing}
+.drag-handle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+
 /* Filter */
 .filter-select{
   padding:8px 12px;border:1px solid var(--border);border-radius:8px;
@@ -580,7 +588,8 @@ function billItem(b){
         <svg width="14" height="14" viewBox="0 0 87.3 78" fill="currentColor"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.5 53.4H0c0 1.55.4 3.1 1.2 4.5zm73.7-40.2L66.6 3.4C65.8 2 64.65.9 63.3.1L50 23.7h26.5c0-1.55-.4-3.1-1.2-4.5zM43.65 26.9L30.5 3.4c-1.35.8-2.5 1.9-3.3 3.3L1 51.95c-.8 1.4-1.2 2.95-1.2 4.5h28.7zm7.2 3.8h26.5l-26.5-45.9c-1.35-.8-2.9-1.2-4.5-1.2s-3.15.4-4.5 1.2L28.5 30.7h26.5zM27.5 56.8l-13.8 23.9c1.35.8 2.9 1.2 4.5 1.2h63.3c1.6 0 3.15-.4 4.5-1.2L72.25 56.8H27.5z"/></svg>
       </a>`
     :'';
-  return`<div class="bill-item">
+  return`<div class="bill-item" data-id="${b.id}" draggable="true">
+    <div class="drag-handle" title="Drag to reorder"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
     <div class="bill-dot" style="background:${DOT_COLORS[b.cat]||'#888'}"></div>
     <div class="bill-info">
       <div class="bill-name">${b.name}</div>
@@ -715,6 +724,7 @@ function renderAll(){
   document.getElementById('all-list').innerHTML=filtered.length
     ?filtered.map(billItem).join('')
     :`<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>No bills recorded yet</div>`;
+  if(filtered.length) initDrag('all-list', filtered);
 }
 
 let pendingReceiptBase64 = null;
@@ -816,6 +826,94 @@ async function uploadReceiptToDrive(billName, billDate){
   }catch(e){
     return null;
   }
+}
+
+// ── Drag & drop reordering ──────────────────────────────
+function initDrag(containerId, filteredList){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  let dragSrcId = null;
+  let touchDragId = null;
+  let touchClone = null;
+  let touchStartY = 0;
+
+  container.querySelectorAll('.bill-item').forEach(item => {
+    // Desktop drag events
+    item.addEventListener('dragstart', e => {
+      dragSrcId = parseInt(item.dataset.id);
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    item.addEventListener('dragend', () => {
+      item.classList.remove('dragging');
+      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
+    });
+    item.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
+      item.classList.add('drag-over');
+    });
+    item.addEventListener('drop', e => {
+      e.preventDefault();
+      const dropId = parseInt(item.dataset.id);
+      if(dragSrcId === dropId) return;
+      reorderBills(dragSrcId, dropId, filteredList);
+    });
+
+    // Touch drag events (mobile)
+    const handle = item.querySelector('.drag-handle');
+    if(!handle) return;
+    handle.addEventListener('touchstart', e => {
+      touchDragId = parseInt(item.dataset.id);
+      touchStartY = e.touches[0].clientY;
+      // Create floating clone
+      touchClone = item.cloneNode(true);
+      touchClone.style.cssText = `position:fixed;left:${item.getBoundingClientRect().left}px;top:${item.getBoundingClientRect().top}px;width:${item.offsetWidth}px;opacity:0.85;z-index:9999;pointer-events:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);`;
+      document.body.appendChild(touchClone);
+      item.classList.add('dragging');
+      e.preventDefault();
+    }, {passive:false});
+
+    handle.addEventListener('touchmove', e => {
+      if(!touchClone) return;
+      const dy = e.touches[0].clientY - touchStartY;
+      const rect = item.getBoundingClientRect();
+      touchClone.style.top = (rect.top + dy) + 'px';
+      // Find item under touch
+      const els = document.elementsFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
+      const target = els.find(el => el.classList.contains('bill-item') && el !== item);
+      if(target) target.classList.add('drag-over');
+      e.preventDefault();
+    }, {passive:false});
+
+    handle.addEventListener('touchend', e => {
+      if(touchClone){document.body.removeChild(touchClone); touchClone=null;}
+      item.classList.remove('dragging');
+      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
+      const touch = e.changedTouches[0];
+      const els = document.elementsFromPoint(touch.clientX, touch.clientY);
+      const target = els.find(el => el.classList.contains('bill-item') && parseInt(el.dataset.id) !== touchDragId);
+      if(target){
+        reorderBills(touchDragId, parseInt(target.dataset.id), filteredList);
+      }
+      touchDragId = null;
+    });
+  });
+}
+
+function reorderBills(srcId, dstId, filteredList){
+  // Work on global bills array — find positions
+  const srcIdx = bills.findIndex(b => b.id === srcId);
+  const dstIdx = bills.findIndex(b => b.id === dstId);
+  if(srcIdx === -1 || dstIdx === -1) return;
+  const [moved] = bills.splice(srcIdx, 1);
+  bills.splice(dstIdx, 0, moved);
+  save();
+  renderAll();
+  renderDaily();
+  renderWeekly();
 }
 </script>
 </body>

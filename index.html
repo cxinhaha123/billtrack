@@ -92,6 +92,8 @@ body{
   gap:3px;
   transition:color 0.15s;
   white-space:nowrap;
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
 }
 .nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
 .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
@@ -126,11 +128,12 @@ body{
   border:1px solid var(--border);
   border-radius:8px;
   font-family:'DM Sans',sans-serif;
-  font-size:15px;
+  font-size:16px;
   background:var(--bg);
   color:var(--ink);
   transition:border-color 0.15s;
   -webkit-appearance:none;
+  touch-action:manipulation;
 }
 .form-input:focus{outline:none;border-color:var(--accent)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
@@ -160,8 +163,13 @@ body{
   justify-content:center;
   font-size:15px;
   padding:13px;
+  -webkit-tap-highlight-color:rgba(0,0,0,0.1);
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
 }
 .btn-primary:hover{background:#A8350A}
+.btn-primary:active{background:#8A2D08;transform:scale(0.98)}
 /* Upload area */
 .upload-area{
   border:1.5px dashed var(--border);
@@ -235,7 +243,8 @@ body{
 .bill-item{transition:opacity 0.15s,transform 0.15s}
 .bill-item.dragging{opacity:0.4;transform:scale(0.98)}
 .bill-item.drag-over{border-top:2px solid var(--accent)}
-.drag-handle{cursor:grab;color:var(--ink3);padding:4px 6px;flex-shrink:0;touch-action:none;display:flex;align-items:center}
+.drag-handle{cursor:grab;color:var(--ink3);padding:8px 8px;flex-shrink:0;touch-action:none;display:flex;align-items:center}
+.bill-item{touch-action:pan-y}
 .drag-handle:active{cursor:grabbing}
 .drag-handle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
 
@@ -342,7 +351,7 @@ body{
         <input class="form-input" type="text" id="b-pay-custom" placeholder="e.g. Maybank, CIMB…" style="display:none;margin-top:6px" oninput="syncCustomPay()">
       </div>
     </div>
-    <button class="btn btn-primary" id="add-btn" onclick="addBill()">Add bill</button>
+    <button class="btn btn-primary" id="add-btn" type="button" onclick="addBill()" ontouchend="this._tapped=true;addBill();event.preventDefault()" style="min-height:52px;font-size:16px">Add bill</button>
   </div>
 </div>
 

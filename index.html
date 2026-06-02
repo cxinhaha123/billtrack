@@ -698,7 +698,23 @@ async function handleReceipt(input){
           max_tokens:400,
           messages:[{role:'user',content:[
             {type:mt==='application/pdf'?'document':'image',source:{type:'base64',media_type:mt,data:base64}},
-            {type:'text',text:'Extract from this receipt: merchant name/description, total amount as a number, and date as YYYY-MM-DD. Reply ONLY with JSON: {"name":"...","amount":0.00,"date":"YYYY-MM-DD"}. If no date found use '+today()+'. If amount unclear use 0.'}
+            {type:'text',text:`You are extracting expense data from an image. The image may be any of these:
+- A physical receipt or invoice
+- A screenshot of a bank transaction alert email (e.g. Standard Chartered, Maybank, CIMB, RHB, Hong Leong)
+- A screenshot of an e-wallet transaction (TNG, GrabPay, Boost)
+- A screenshot of an online banking transaction
+- A credit/debit card transaction notification
+
+Extract the following:
+1. "name": The merchant or payee name. For bank alert emails look for patterns like "successful at MERCHANT NAME", "payment to MERCHANT", "purchase at MERCHANT". Clean up truncated names (e.g. "BANH MI 77 G.." → "Banh Mi 77"). For transfers use the recipient name.
+2. "amount": The transaction amount as a plain number (no currency symbol). For Malaysian bank emails look for "MYR XX.XX" or "RM XX.XX". Use the purchase/debit amount, not any fee.
+3. "date": Transaction date in YYYY-MM-DD format. Look for dates in the email header, alert timestamp, or transaction details. If only time is shown use today's date.
+4. "cat": Best guess category — one of: food, grocery, transport, utilities, health, entertainment, other. Infer from merchant name (e.g. restaurant → food, Petronas → transport, pharmacy → health).
+
+Reply ONLY with raw JSON, no markdown, no explanation:
+{"name":"...","amount":0.00,"date":"YYYY-MM-DD","cat":"food"}
+
+Today's date is ${today()}. If anything is truly unclear use: name="Unknown", amount=0, date today, cat="other".`}
           ]}]
         })
       });
@@ -709,7 +725,9 @@ async function handleReceipt(input){
       if(parsed.name)document.getElementById('b-name').value=parsed.name;
       if(parsed.amount)document.getElementById('b-amount').value=parsed.amount;
       if(parsed.date)document.getElementById('b-date').value=parsed.date;
-      note.innerHTML='✓ Receipt scanned — review then tap <strong>Add bill</strong>. Receipt will be saved to Google Drive automatically.';
+      if(parsed.cat){const sel=document.getElementById('b-cat');if([...sel.options].some(o=>o.value===parsed.cat))sel.value=parsed.cat;}
+      const srcLabel = parsed.name && parsed.name!=='Unknown' ? `<strong>${parsed.name}</strong> — RM ${parsed.amount} detected` : 'Details filled in';
+      note.innerHTML='✓ '+srcLabel+' — review then tap <strong>Add bill</strong>.';
     }catch(err){
       note.textContent='Could not read receipt. Please fill in manually.';
     }

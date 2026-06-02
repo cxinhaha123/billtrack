@@ -358,7 +358,7 @@ body{
       </div>
       <div>
         <label class="form-label">Payment method</label>
-        <select class="form-input" id="b-pay">
+        <select class="form-input" id="b-pay" onchange="onPayChange()">
           <option value="applepay">🍎 Apple Pay</option>
           <option value="tng">💚 TNG eWallet</option>
           <option value="grabpay">🟢 GrabPay</option>
@@ -369,6 +369,7 @@ body{
           <option value="boost">⚡ Boost</option>
           <option value="other">📦 Other</option>
         </select>
+        <input class="form-input" type="text" id="b-pay-custom" placeholder="e.g. Maybank, CIMB…" style="display:none;margin-top:6px" oninput="syncCustomPay()">
       </div>
     </div>
     <button class="btn btn-primary" id="add-btn" onclick="addBill()">Add bill</button>
@@ -488,6 +489,24 @@ const PAY = {applepay:{label:'Apple Pay',icon:'🍎'},tng:{label:'TNG',icon:'�
 
 function save(){localStorage.setItem('billtrack_v2',JSON.stringify(bills))}
 
+function onPayChange(){
+  const sel=document.getElementById('b-pay');
+  const box=document.getElementById('b-pay-custom');
+  box.style.display=sel.value==='other'?'block':'none';
+  if(sel.value!=='other')box.value='';
+}
+function syncCustomPay(){
+  // keeps custom text in sync — read via getPayValue()
+}
+function getPayValue(){
+  const sel=document.getElementById('b-pay');
+  if(sel.value==='other'){
+    const custom=document.getElementById('b-pay-custom').value.trim();
+    return custom||'other';
+  }
+  return sel.value;
+}
+
 function today(){return new Date().toISOString().split('T')[0]}
 function fmtDate(d){const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
 function fmtRM(n){return'RM '+n.toFixed(2)}
@@ -517,7 +536,7 @@ async function addBill(){
   const name=document.getElementById('b-name').value.trim();
   const amount=parseFloat(document.getElementById('b-amount').value);
   const cat=document.getElementById('b-cat').value;
-  const pay=document.getElementById('b-pay').value;
+  const pay=getPayValue();
   const date=document.getElementById('b-date').value;
   if(!name||isNaN(amount)||amount<=0){toast('Please enter description and amount');return;}
   const btn=document.getElementById('add-btn');
@@ -565,7 +584,7 @@ function billItem(b){
     <div class="bill-dot" style="background:${DOT_COLORS[b.cat]||'#888'}"></div>
     <div class="bill-info">
       <div class="bill-name">${b.name}</div>
-      <div class="bill-meta"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${c.label}</span>${b.pay&&PAY[b.pay]?' · <span style="font-size:11px">'+PAY[b.pay].icon+' '+PAY[b.pay].label+'</span>':''} · ${fmtDate(b.date)}</div>
+      <div class="bill-meta"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${c.label}</span>${b.pay?(PAY[b.pay]?' · <span style="font-size:11px">'+PAY[b.pay].icon+' '+PAY[b.pay].label+'</span>':' · <span style="font-size:11px">📦 '+b.pay+'</span>'):''} · ${fmtDate(b.date)}</div>
     </div>
     <div class="bill-amount">${fmtRM(b.amount)}</div>
     ${driveIcon}

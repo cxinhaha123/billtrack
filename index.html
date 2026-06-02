@@ -1,307 +1,97 @@
-<!DOCTYPE html><!-- BillTrack v2026-06-02 08:54 UTC -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BillTrack – My Expense Diary</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>BillTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#F5F2EC;
-  --surface:#FFFEFB;
-  --surface2:#F0EDE6;
-  --ink:#1A1812;
-  --ink2:#6B6659;
-  --ink3:#A09D94;
-  --accent:#C9430A;
-  --accent2:#E8A87C;
-  --green:#2D6A4F;
-  --green-bg:#D8F3DC;
-  --blue:#1B4F7A;
-  --blue-bg:#DAEAF5;
-  --amber:#7A4F00;
-  --amber-bg:#FFF3CD;
-  --pink:#7A1B4F;
-  --pink-bg:#F5D5E8;
-  --teal:#0D6E5B;
-  --teal-bg:#D4EDE8;
-  --purple:#3D2B8A;
-  --purple-bg:#E8E4F7;
-  --gray:#4A4740;
-  --gray-bg:#EBEBEB;
-  --border:#E0DBD2;
-  --radius:12px;
-  --shadow:0 2px 12px rgba(26,24,18,0.07);
+  --bg:#F5F2EC;--surface:#FFFEFB;--surface2:#F0EDE6;
+  --ink:#1A1812;--ink2:#6B6659;--ink3:#A09D94;
+  --accent:#C9430A;--border:#E0DBD2;--radius:12px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--ink);
-  min-height:100vh;
-  font-size:15px;
-}
-/* Header */
-.header{
-  background:var(--ink);
-  color:#fff;
-  padding:18px 20px 16px;
-  display:flex;
-  align-items:baseline;
-  gap:10px;
-  position:sticky;
-  top:0;
-  z-index:100;
-}
-.header h1{
-  font-family:'DM Serif Display',serif;
-  font-size:22px;
-  letter-spacing:-0.3px;
-}
-.header span{
-  font-size:12px;
-  opacity:0.5;
-  font-weight:300;
-}
-/* Nav tabs */
-.nav{
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  overflow-x:auto;
-  scrollbar-width:none;
-  position:sticky;
-  top:56px;
-  z-index:99;
-}
-.nav::-webkit-scrollbar{display:none}
-.nav-btn{
-  flex:1;
-  min-width:70px;
-  padding:13px 8px 11px;
-  border:none;
-  background:none;
-  font-family:'DM Sans',sans-serif;
-  font-size:13px;
-  color:var(--ink3);
-  cursor:pointer;
-  border-bottom:2px solid transparent;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:3px;
-  transition:color 0.15s;
-  white-space:nowrap;
-  touch-action:manipulation;
-  -webkit-tap-highlight-color:transparent;
-}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;min-height:100vh}
+button,select,input{font-family:inherit;touch-action:manipulation}
+.header{background:var(--ink);color:#fff;padding:18px 20px;display:flex;align-items:baseline;gap:10px;position:sticky;top:0;z-index:100}
+.header h1{font-family:'DM Serif Display',serif;font-size:22px}
+.header span{font-size:12px;opacity:0.5}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;position:sticky;top:56px;z-index:99}
+.nav-btn{flex:1;padding:13px 8px;border:none;background:none;font-size:13px;color:var(--ink3);cursor:pointer;border-bottom:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:3px}
 .nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
 .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
-/* Content */
 .content{padding:16px;max-width:480px;margin:0 auto}
-/* Cards */
-.card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:16px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow);
-}
-/* Metrics */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
 .metrics.three{grid-template-columns:1fr 1fr 1fr}
-.metric{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:14px 12px;
-}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px}
 .metric-label{font-size:11px;color:var(--ink3);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px}
-.metric-value{font-family:'DM Serif Display',serif;font-size:26px;color:var(--ink);line-height:1}
-.metric-value.sm{font-size:20px}
-/* Form */
+.metric-value{font-family:'DM Serif Display',serif;font-size:24px;color:var(--ink);line-height:1}
 .form-label{font-size:12px;color:var(--ink2);margin-bottom:5px;display:block;font-weight:500}
-.form-input{
-  width:100%;
-  padding:10px 12px;
-  border:1px solid var(--border);
-  border-radius:8px;
-  font-family:'DM Sans',sans-serif;
-  font-size:16px;
-  background:var(--bg);
-  color:var(--ink);
-  transition:border-color 0.15s;
-  -webkit-appearance:none;
-  touch-action:manipulation;
-}
+.form-input{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:16px;background:var(--bg);color:var(--ink);-webkit-appearance:none}
 .form-input:focus{outline:none;border-color:var(--accent)}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .form-group{margin-bottom:12px}
-/* Buttons */
-.btn{
-  padding:11px 18px;
-  border-radius:8px;
-  font-family:'DM Sans',sans-serif;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  border:1px solid var(--border);
-  background:var(--surface);
-  color:var(--ink);
-  transition:all 0.15s;
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-}
-.btn:hover{background:var(--surface2)}
-.btn-primary{
-  background:var(--accent);
-  color:#fff;
-  border-color:var(--accent);
-  width:100%;
-  justify-content:center;
-  font-size:15px;
-  padding:13px;
-  -webkit-tap-highlight-color:rgba(0,0,0,0.1);
-  touch-action:manipulation;
-  user-select:none;
-  -webkit-user-select:none;
-}
-.btn-primary:hover{background:#A8350A}
-.btn-primary:active{background:#8A2D08;transform:scale(0.98)}
-/* Upload area */
-.upload-area{
-  border:1.5px dashed var(--border);
-  border-radius:var(--radius);
-  padding:20px;
-  text-align:center;
-  cursor:pointer;
-  color:var(--ink3);
-  font-size:13px;
-  transition:all 0.15s;
-  margin-bottom:14px;
-}
-.upload-area:hover{border-color:var(--accent);color:var(--accent);background:rgba(201,67,10,0.03)}
-.upload-area svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.5;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto}
-/* Bill items */
-.bill-item{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px 0;
-  border-bottom:1px solid var(--border);
-}
+.btn{padding:14px 18px;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:48px;user-select:none;-webkit-user-select:none}
+.btn:active{transform:scale(0.98)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);width:100%;font-size:17px;min-height:54px;font-weight:500}
+.btn-primary:active{background:#8A2D08}
+.btn-primary:disabled{opacity:0.6}
+.receipt-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 10px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;cursor:pointer;color:var(--ink2);font-size:13px;width:100%;min-height:80px}
+.receipt-btn:active{border-color:var(--accent);color:var(--accent)}
+.receipt-btn svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.6}
+.bill-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}
 .bill-item:last-child{border-bottom:none}
-.bill-dot{
-  width:8px;height:8px;border-radius:50%;flex-shrink:0;
-}
+.bill-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .bill-info{flex:1;min-width:0}
-.bill-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.bill-meta{font-size:12px;color:var(--ink3);margin-top:1px}
+.bill-name{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bill-meta{font-size:12px;color:var(--ink3);margin-top:2px}
 .bill-amount{font-size:15px;font-weight:500;white-space:nowrap;font-family:'DM Serif Display',serif}
-.del-btn{
-  background:none;border:none;cursor:pointer;
-  color:var(--ink3);font-size:18px;line-height:1;
-  padding:4px 6px;border-radius:4px;
-  transition:all 0.1s;flex-shrink:0;
-}
-.del-btn:hover{background:var(--surface2);color:var(--accent)}
-/* Category badge */
-.cat-badge{
-  font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap;flex-shrink:0;
-}
-/* Bar charts */
+.del-btn{background:none;border:none;cursor:pointer;color:var(--ink3);font-size:22px;line-height:1;padding:8px 10px;flex-shrink:0;min-height:44px;min-width:44px}
+.del-btn:active{color:var(--accent)}
+.cat-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;display:inline-block}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .bar-label{font-size:12px;color:var(--ink2);min-width:80px}
-.bar-track{flex:1;background:var(--surface2);border-radius:4px;height:7px;overflow:hidden}
-.bar-fill{height:7px;border-radius:4px;transition:width 0.4s ease}
-.bar-val{font-size:12px;color:var(--ink2);min-width:68px;text-align:right}
-/* Section title */
-.sec-title{
-  font-size:11px;font-weight:500;letter-spacing:0.07em;
-  text-transform:uppercase;color:var(--ink3);margin-bottom:12px;
-}
-/* Empty state */
-.empty{
-  text-align:center;padding:2.5rem 1rem;
-  color:var(--ink3);font-size:14px;line-height:1.6;
-}
+.bar-track{flex:1;background:var(--surface2);border-radius:4px;height:8px;overflow:hidden}
+.bar-fill{height:8px;border-radius:4px;transition:width 0.4s}
+.bar-val{font-size:12px;color:var(--ink2);min-width:80px;text-align:right}
+.sec-title{font-size:11px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px}
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--ink3);font-size:14px}
 .empty svg{width:40px;height:40px;stroke:currentColor;fill:none;stroke-width:1.2;margin:0 auto 10px;display:block;opacity:0.4}
-/* Toast */
-.toast{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--ink);color:#fff;padding:10px 20px;
-  border-radius:20px;font-size:13px;transition:transform 0.3s;z-index:999;
-  white-space:nowrap;
-}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:24px;font-size:14px;transition:transform 0.3s;z-index:999;white-space:nowrap;max-width:90vw}
 .toast.show{transform:translateX(-50%) translateY(0)}
-/* Receipt status */
-.receipt-note{font-size:12px;color:var(--ink3);margin-top:6px;min-height:16px}
-/* WhatsApp preview */
-/* Drag and drop */
-.bill-item{transition:opacity 0.15s,transform 0.15s}
-.bill-item.dragging{opacity:0.4;transform:scale(0.98)}
-.bill-item.drag-over{border-top:2px solid var(--accent)}
-.drag-handle{cursor:grab;color:var(--ink3);padding:8px 8px;flex-shrink:0;touch-action:none;display:flex;align-items:center}
-.bill-item{touch-action:pan-y}
-.drag-handle:active{cursor:grabbing}
-.drag-handle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
-
-/* Filter */
-.filter-select{
-  padding:8px 12px;border:1px solid var(--border);border-radius:8px;
-  font-family:'DM Sans',sans-serif;font-size:13px;
-  background:var(--surface);color:var(--ink);
-  -webkit-appearance:none;
-}
+.receipt-note{font-size:13px;color:var(--ink3);margin-top:8px;min-height:18px}
+.filter-select{padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;background:var(--surface);color:var(--ink);-webkit-appearance:none;min-height:42px}
 .hidden{display:none}
+.drag-handle{cursor:grab;color:var(--ink3);padding:8px;flex-shrink:0;display:flex;align-items:center;touch-action:none}
+.drag-handle svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.bill-item.dragging{opacity:0.4}
+.bill-item.drag-over{border-top:2px solid var(--accent)}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>BillTrack</h1>
-  <span>Penang Expense Diary</span>
-</div>
+<div class="header"><h1>BillTrack</h1><span>Penang Expense Diary</span></div>
 
 <nav class="nav">
-  <button class="nav-btn active" onclick="showTab('add')" id="nav-add">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-    Add
-  </button>
-  <button class="nav-btn" onclick="showTab('daily')" id="nav-daily">
-    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-    Today
-  </button>
-  <button class="nav-btn" onclick="showTab('weekly')" id="nav-weekly">
-    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    Week
-  </button>
-  <button class="nav-btn" onclick="showTab('all')" id="nav-all">
-    <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>
-    All
-  </button>
+  <button class="nav-btn active" id="nav-add" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Add</button>
+  <button class="nav-btn" id="nav-daily" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Today</button>
+  <button class="nav-btn" id="nav-weekly" type="button"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Week</button>
+  <button class="nav-btn" id="nav-all" type="button"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>All</button>
 </nav>
 
-<!-- ADD TAB -->
 <div id="tab-add" class="content">
   <div class="card">
     <div class="sec-title">Scan receipt</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <button class="receipt-btn" onclick="document.getElementById('camera-input').click()" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;cursor:pointer;color:var(--ink2);font-family:inherit;font-size:13px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">
-        <svg width="26" height="26" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Take photo
-        <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleReceipt(this)">
-      </button>
-      <button class="receipt-btn" onclick="document.getElementById('upload-input').click()" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;cursor:pointer;color:var(--ink2);font-family:inherit;font-size:13px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">
-        <svg width="26" height="26" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Upload file
-        <input type="file" id="upload-input" accept="image/*,.pdf" style="display:none" onchange="handleReceipt(this)">
-      </button>
+      <button class="receipt-btn" type="button" id="cam-btn"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>Take photo</button>
+      <button class="receipt-btn" type="button" id="up-btn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload file</button>
     </div>
-    <div id="receipt-preview" style="display:none;margin-bottom:8px;text-align:center">
-      <img id="receipt-img" style="max-width:100%;max-height:160px;border-radius:8px;border:1px solid var(--border);object-fit:contain" alt="Receipt preview">
+    <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none">
+    <input type="file" id="upload-input" accept="image/*,.pdf" style="display:none">
+    <div id="receipt-preview" style="display:none;margin:8px 0;text-align:center">
+      <img id="receipt-img" style="max-width:100%;max-height:160px;border-radius:8px;border:1px solid var(--border)">
     </div>
     <div class="receipt-note" id="receipt-note"></div>
   </div>
@@ -310,12 +100,12 @@ body{
     <div class="sec-title">Manual entry</div>
     <div class="form-group">
       <label class="form-label">Description</label>
-      <input class="form-input" type="text" id="b-name" placeholder="e.g. Grab food, TNB bill…">
+      <input class="form-input" type="text" id="b-name" placeholder="e.g. Grab food, TNB bill" autocomplete="off">
     </div>
     <div class="form-row">
       <div>
         <label class="form-label">Amount (RM)</label>
-        <input class="form-input" type="number" id="b-amount" placeholder="0.00" min="0" step="0.01">
+        <input class="form-input" type="number" id="b-amount" placeholder="0.00" min="0" step="0.01" inputmode="decimal">
       </div>
       <div>
         <label class="form-label">Date</label>
@@ -326,84 +116,60 @@ body{
       <div>
         <label class="form-label">Category</label>
         <select class="form-input" id="b-cat">
-          <option value="food">🍜 Food & drink</option>
+          <option value="food">🍜 Food</option>
           <option value="grocery">🛒 Grocery</option>
           <option value="transport">🚗 Transport</option>
-          <option value="utilities">💡 Utilities</option>
+          <option value="utilities">💡 Utility</option>
           <option value="health">💊 Health</option>
-          <option value="entertainment">🎬 Entertainment</option>
+          <option value="entertainment">🎬 Fun</option>
           <option value="other">📦 Other</option>
         </select>
       </div>
       <div>
-        <label class="form-label">Payment method</label>
-        <select class="form-input" id="b-pay" onchange="onPayChange()">
+        <label class="form-label">Payment</label>
+        <select class="form-input" id="b-pay">
           <option value="applepay">🍎 Apple Pay</option>
-          <option value="tng">💚 TNG eWallet</option>
+          <option value="tng">💚 TNG</option>
           <option value="grabpay">🟢 GrabPay</option>
-          <option value="debit">💳 Debit card</option>
-          <option value="credit">💳 Credit card</option>
+          <option value="debit">💳 Debit</option>
+          <option value="credit">💳 Credit</option>
           <option value="cash">💵 Cash</option>
-          <option value="bank">🏦 Bank transfer</option>
+          <option value="bank">🏦 Bank</option>
           <option value="boost">⚡ Boost</option>
           <option value="other">📦 Other</option>
         </select>
-        <input class="form-input" type="text" id="b-pay-custom" placeholder="e.g. Maybank, CIMB…" style="display:none;margin-top:6px" oninput="syncCustomPay()">
       </div>
     </div>
-    <button class="btn btn-primary" id="add-btn" type="button" onclick="addBill()" ontouchend="this._tapped=true;addBill();event.preventDefault()" style="min-height:52px;font-size:16px">Add bill</button>
+    <input class="form-input" type="text" id="b-pay-custom" placeholder="Custom payment name" style="display:none;margin-bottom:12px">
+    <button class="btn btn-primary" type="button" id="add-btn">Add bill</button>
   </div>
 </div>
 
-<!-- DAILY TAB -->
 <div id="tab-daily" class="content hidden">
   <div class="metrics three" id="daily-metrics"></div>
-  <div class="card">
-    <div class="sec-title">Today's bills</div>
-    <div id="daily-list"></div>
-  </div>
+  <div class="card"><div class="sec-title">Today's bills</div><div id="daily-list"></div></div>
 </div>
 
-<!-- WEEKLY TAB -->
 <div id="tab-weekly" class="content hidden">
   <div class="metrics" id="weekly-metrics"></div>
-  <div class="card">
-    <div class="sec-title">By category</div>
-    <div id="weekly-cats"></div>
-  </div>
-  <div class="card">
-    <div class="sec-title">Day by day</div>
-    <div id="weekly-days"></div>
-  </div>
+  <div class="card"><div class="sec-title">By category</div><div id="weekly-cats"></div></div>
+  <div class="card"><div class="sec-title">Day by day</div><div id="weekly-days"></div></div>
 </div>
 
-
-<!-- ALL BILLS TAB -->
 <div id="tab-all" class="content hidden">
-  <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
-    <select class="filter-select" id="filter-cat" onchange="renderAll()" style="flex:1">
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <select class="filter-select" id="filter-cat" style="flex:1;min-width:120px">
       <option value="">All categories</option>
-      <option value="food">Food & drink</option>
-      <option value="grocery">Grocery</option>
-      <option value="transport">Transport</option>
-      <option value="utilities">Utilities</option>
-      <option value="health">Health</option>
-      <option value="entertainment">Entertainment</option>
-      <option value="other">Other</option>
+      <option value="food">Food</option><option value="grocery">Grocery</option><option value="transport">Transport</option>
+      <option value="utilities">Utility</option><option value="health">Health</option><option value="entertainment">Fun</option><option value="other">Other</option>
     </select>
-    <select class="filter-select" id="filter-pay" onchange="renderAll()" style="flex:1">
+    <select class="filter-select" id="filter-pay" style="flex:1;min-width:120px">
       <option value="">All methods</option>
-      <option value="applepay">Apple Pay</option>
-      <option value="tng">TNG</option>
-      <option value="grabpay">GrabPay</option>
-      <option value="debit">Debit card</option>
-      <option value="credit">Credit card</option>
-      <option value="cash">Cash</option>
-      <option value="bank">Bank transfer</option>
-      <option value="boost">Boost</option>
-      <option value="other">Other</option>
+      <option value="applepay">Apple Pay</option><option value="tng">TNG</option><option value="grabpay">GrabPay</option>
+      <option value="debit">Debit</option><option value="credit">Credit</option><option value="cash">Cash</option>
+      <option value="bank">Bank</option><option value="boost">Boost</option><option value="other">Other</option>
     </select>
-    <button class="btn" style="font-size:13px;padding:8px 12px;color:var(--accent);border-color:var(--accent)" onclick="clearAll()">Clear all</button>
+    <button class="btn" type="button" id="clear-btn" style="font-size:13px;padding:8px 14px;color:var(--accent);border-color:var(--accent);min-height:42px">Clear all</button>
   </div>
   <div id="all-list"></div>
 </div>
@@ -411,429 +177,307 @@ body{
 <div class="toast" id="toast"></div>
 
 <script>
-let bills = JSON.parse(localStorage.getItem('billtrack_v2') || '[]');
+(function(){
+'use strict';
 
-// Apple Pay Shortcut auto-add via URL params
-// Usage: billtrack.html?name=Starbucks&amount=12.50&cat=food&source=applepay
-(function handleURLParams(){
-  const p = new URLSearchParams(window.location.search);
-  if(!p.get('amount')) return;
-  const name    = p.get('name')   || 'Apple Pay';
-  const amount  = parseFloat(p.get('amount'));
-  const cat     = p.get('cat')    || 'other';
-  const source  = p.get('source') || '';
-  const dateVal = p.get('date')   || new Date().toISOString().split('T')[0];
-  if(isNaN(amount)||amount<=0) return;
-  bills.unshift({id:Date.now(), name, amount, cat, date:dateVal, driveLink:null, source});
-  try{localStorage.setItem('billtrack_v2', JSON.stringify(bills));}catch(e){}
-  // Clean URL so refresh doesn't duplicate
-  window.history.replaceState({}, '', window.location.pathname);
-  // Show confirmation banner after page loads
-  window.addEventListener('DOMContentLoaded', ()=>{
-    setTimeout(()=>toast('✓ Apple Pay — '+name+' RM '+amount.toFixed(2)+' added'), 400);
-  });
-})();
+// ───────── State ─────────
+let bills = [];
+try { bills = JSON.parse(localStorage.getItem('billtrack_v3') || '[]'); } catch(e){ bills = []; }
 
 const CAT = {
-  food:{label:'Food & drink',color:'#2D6A4F',bg:'#D8F3DC'},
-  grocery:{label:'Grocery',color:'#0D6E5B',bg:'#D4EDE8'},
-  transport:{label:'Transport',color:'#1B4F7A',bg:'#DAEAF5'},
-  utilities:{label:'Utility',color:'#7A4F00',bg:'#FFF3CD'},
-  health:{label:'Health',color:'#7A1B4F',bg:'#F5D5E8'},
-  entertainment:{label:'Entertain',color:'#3D2B8A',bg:'#E8E4F7'},
-  other:{label:'Other',color:'#4A4740',bg:'#EBEBEB'}
+  food:{label:'Food',color:'#2D6A4F',bg:'#D8F3DC',dot:'#2D6A4F'},
+  grocery:{label:'Grocery',color:'#0D6E5B',bg:'#D4EDE8',dot:'#0D6E5B'},
+  transport:{label:'Transport',color:'#1B4F7A',bg:'#DAEAF5',dot:'#1B4F7A'},
+  utilities:{label:'Utility',color:'#7A4F00',bg:'#FFF3CD',dot:'#BA7517'},
+  health:{label:'Health',color:'#7A1B4F',bg:'#F5D5E8',dot:'#D4537E'},
+  entertainment:{label:'Fun',color:'#3D2B8A',bg:'#E8E4F7',dot:'#7F77DD'},
+  other:{label:'Other',color:'#4A4740',bg:'#EBEBEB',dot:'#888780'}
 };
-const DOT_COLORS = {food:'#2D6A4F',grocery:'#0D6E5B',transport:'#1B4F7A',utilities:'#BA7517',health:'#D4537E',entertainment:'#7F77DD',other:'#888780'};
-const PAY = {applepay:{label:'Apple Pay',icon:'🍎'},tng:{label:'TNG',icon:'💚'},grabpay:{label:'GrabPay',icon:'🟢'},debit:{label:'Debit',icon:'💳'},credit:{label:'Credit',icon:'💳'},cash:{label:'Cash',icon:'💵'},bank:{label:'Bank',icon:'🏦'},boost:{label:'Boost',icon:'⚡'},other:{label:'Other',icon:'📦'}};
+const PAY = {
+  applepay:{label:'Apple Pay',icon:'🍎'},tng:{label:'TNG',icon:'💚'},grabpay:{label:'GrabPay',icon:'🟢'},
+  debit:{label:'Debit',icon:'💳'},credit:{label:'Credit',icon:'💳'},cash:{label:'Cash',icon:'💵'},
+  bank:{label:'Bank',icon:'🏦'},boost:{label:'Boost',icon:'⚡'},other:{label:'Other',icon:'📦'}
+};
 
-function save(){localStorage.setItem('billtrack_v2',JSON.stringify(bills))}
+let pendingReceipt = null; // {base64, mime}
 
-function onPayChange(){
-  const sel=document.getElementById('b-pay');
-  const box=document.getElementById('b-pay-custom');
-  box.style.display=sel.value==='other'?'block':'none';
-  if(sel.value!=='other')box.value='';
+// ───────── Utilities ─────────
+function $(id){ return document.getElementById(id); }
+function today(){ return new Date().toISOString().split('T')[0]; }
+function fmtDate(d){ const p=d.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function fmtRM(n){ return 'RM '+Number(n).toFixed(2); }
+function save(){ try{ localStorage.setItem('billtrack_v3', JSON.stringify(bills)); }catch(e){} }
+
+function toast(msg){
+  const el=$('toast'); el.textContent=msg; el.classList.add('show');
+  setTimeout(function(){ el.classList.remove('show'); }, 2200);
 }
-function syncCustomPay(){
-  // keeps custom text in sync — read via getPayValue()
+
+// ───────── Tabs ─────────
+function showTab(t){
+  ['add','daily','weekly','all'].forEach(function(id){
+    $('tab-'+id).classList.add('hidden');
+    $('nav-'+id).classList.remove('active');
+  });
+  $('tab-'+t).classList.remove('hidden');
+  $('nav-'+t).classList.add('active');
+  if(t==='daily') renderDaily();
+  if(t==='weekly') renderWeekly();
+  if(t==='all') renderAll();
 }
+
+// ───────── Add Bill ─────────
 function getPayValue(){
-  const sel=document.getElementById('b-pay');
+  const sel=$('b-pay');
   if(sel.value==='other'){
-    const custom=document.getElementById('b-pay-custom').value.trim();
-    return custom||'other';
+    const custom=$('b-pay-custom').value.trim();
+    return custom || 'other';
   }
   return sel.value;
 }
 
-function today(){return new Date().toISOString().split('T')[0]}
-function fmtDate(d){const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
-function fmtRM(n){return'RM '+n.toFixed(2)}
-
-document.getElementById('b-date').value = today();
-
-function showTab(t){
-  ['add','daily','weekly','all'].forEach(id=>{
-    document.getElementById('tab-'+id).classList.add('hidden');
-    document.getElementById('nav-'+id).classList.remove('active');
-  });
-  document.getElementById('tab-'+t).classList.remove('hidden');
-  document.getElementById('nav-'+t).classList.add('active');
-  if(t==='daily')renderDaily();
-  if(t==='weekly')renderWeekly();
-  if(t==='all')renderAll();
-}
-
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg;el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),2200);
-}
-
 async function addBill(){
-  const name=document.getElementById('b-name').value.trim();
-  const amount=parseFloat(document.getElementById('b-amount').value);
-  const cat=document.getElementById('b-cat').value;
+  const name=$('b-name').value.trim();
+  const amount=parseFloat($('b-amount').value);
+  const cat=$('b-cat').value;
   const pay=getPayValue();
-  const date=document.getElementById('b-date').value;
-  if(!name||isNaN(amount)||amount<=0){toast('Please enter description and amount');return;}
-  const btn=document.getElementById('add-btn');
-  btn.textContent='Saving…';btn.disabled=true;
-  let driveLink=null;
-  if(pendingReceiptBase64){
-    const note=document.getElementById('receipt-note');
-    note.textContent='Uploading receipt to Google Drive…';
-    driveLink=await uploadReceiptToDrive(name,date);
-    note.innerHTML=driveLink
-      ?'✓ Saved to Google Drive — <a href="'+driveLink+'" target="_blank" style="color:var(--accent)">view receipt</a>'
-      :'Receipt upload failed — bill saved without attachment.';
-  }
-  bills.unshift({id:Date.now(),name,amount,cat,pay,date,driveLink});
+  const date=$('b-date').value || today();
+  if(!name){ toast('Please enter description'); $('b-name').focus(); return; }
+  if(isNaN(amount)||amount<=0){ toast('Please enter valid amount'); $('b-amount').focus(); return; }
+
+  const btn=$('add-btn');
+  btn.textContent='Saving…'; btn.disabled=true;
+
+  bills.unshift({ id:Date.now(), name:name, amount:amount, cat:cat, pay:pay, date:date, driveLink:null });
   save();
-  document.getElementById('b-name').value='';
-  document.getElementById('b-amount').value='';
-  document.getElementById('b-date').value=today();
-  document.getElementById('receipt-preview').style.display='none';
-  document.getElementById('receipt-img').src='';
-  btn.textContent='✓ Saved!';btn.disabled=false;
-  setTimeout(()=>btn.textContent='Add bill',1400);
-  toast(driveLink?'Bill added + receipt on Drive':'Bill added');
+
+  $('b-name').value='';
+  $('b-amount').value='';
+  $('b-date').value=today();
+  $('b-pay-custom').value='';
+  $('b-pay-custom').style.display='none';
+  $('receipt-preview').style.display='none';
+  $('receipt-img').src='';
+  $('receipt-note').textContent='';
+  pendingReceipt=null;
+
+  btn.textContent='✓ Saved!'; btn.disabled=false;
+  setTimeout(function(){ btn.textContent='Add bill'; }, 1500);
+  toast('Bill added: '+name);
 }
 
 function deleteBill(id){
-  if(!confirm('Delete this bill?'))return;
-  bills=bills.filter(b=>b.id!==id);save();
-  renderDaily();renderWeekly();renderAll();toast('Deleted');
+  if(!confirm('Delete this bill?')) return;
+  bills=bills.filter(function(b){ return b.id!==id; });
+  save(); renderDaily(); renderWeekly(); renderAll();
+  toast('Deleted');
 }
 
 function clearAll(){
-  if(!confirm('Delete ALL bills? This cannot be undone.'))return;
-  bills=[];save();renderAll();toast('All bills cleared');
+  if(!confirm('Delete ALL bills? This cannot be undone.')) return;
+  bills=[]; save(); renderAll(); toast('All cleared');
 }
 
+// ───────── Rendering ─────────
 function billItem(b){
   const c=CAT[b.cat]||CAT.other;
-  const driveIcon=b.driveLink
-    ?`<a href="${b.driveLink}" target="_blank" title="View receipt on Google Drive" style="color:#2D6A4F;display:flex;align-items:center;padding:4px 5px;border-radius:4px;text-decoration:none;flex-shrink:0">
-        <svg width="14" height="14" viewBox="0 0 87.3 78" fill="currentColor"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.5 53.4H0c0 1.55.4 3.1 1.2 4.5zm73.7-40.2L66.6 3.4C65.8 2 64.65.9 63.3.1L50 23.7h26.5c0-1.55-.4-3.1-1.2-4.5zM43.65 26.9L30.5 3.4c-1.35.8-2.5 1.9-3.3 3.3L1 51.95c-.8 1.4-1.2 2.95-1.2 4.5h28.7zm7.2 3.8h26.5l-26.5-45.9c-1.35-.8-2.9-1.2-4.5-1.2s-3.15.4-4.5 1.2L28.5 30.7h26.5zM27.5 56.8l-13.8 23.9c1.35.8 2.9 1.2 4.5 1.2h63.3c1.6 0 3.15-.4 4.5-1.2L72.25 56.8H27.5z"/></svg>
-      </a>`
-    :'';
-  return`<div class="bill-item" data-id="${b.id}" draggable="true">
-    <div class="drag-handle" title="Drag to reorder"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg></div>
-    <div class="bill-dot" style="background:${DOT_COLORS[b.cat]||'#888'}"></div>
-    <div class="bill-info">
-      <div class="bill-name">${b.name}</div>
-      <div class="bill-meta"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${c.label}</span>${b.pay?(PAY[b.pay]?' · <span style="font-size:11px">'+PAY[b.pay].icon+' '+PAY[b.pay].label+'</span>':' · <span style="font-size:11px">📦 '+b.pay+'</span>'):''} · ${fmtDate(b.date)}</div>
-    </div>
-    <div class="bill-amount">${fmtRM(b.amount)}</div>
-    ${driveIcon}
-    <button class="del-btn" onclick="deleteBill(${b.id})" title="Delete">x</button>
-  </div>`;
+  let payHtml='';
+  if(b.pay){
+    if(PAY[b.pay]) payHtml=' · '+PAY[b.pay].icon+' '+PAY[b.pay].label;
+    else payHtml=' · 📦 '+b.pay;
+  }
+  return '<div class="bill-item" data-id="'+b.id+'">'+
+    '<div class="bill-dot" style="background:'+c.dot+'"></div>'+
+    '<div class="bill-info">'+
+      '<div class="bill-name">'+escapeHtml(b.name)+'</div>'+
+      '<div class="bill-meta"><span class="cat-badge" style="background:'+c.bg+';color:'+c.color+'">'+c.label+'</span>'+payHtml+' · '+fmtDate(b.date)+'</div>'+
+    '</div>'+
+    '<div class="bill-amount">'+fmtRM(b.amount)+'</div>'+
+    '<button class="del-btn" type="button" data-del="'+b.id+'">×</button>'+
+  '</div>';
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
 }
 
 function renderDaily(){
   const tod=today();
-  const tb=bills.filter(b=>b.date===tod);
-  const total=tb.reduce((s,b)=>s+b.amount,0);
-  const cats=[...new Set(tb.map(b=>b.cat))].length;
-  document.getElementById('daily-metrics').innerHTML=`
-    <div class="metric"><div class="metric-label">Total today</div><div class="metric-value sm">${fmtRM(total)}</div></div>
-    <div class="metric"><div class="metric-label">Bills</div><div class="metric-value">${tb.length}</div></div>
-    <div class="metric"><div class="metric-label">Categories</div><div class="metric-value">${cats}</div></div>`;
-  document.getElementById('daily-list').innerHTML=tb.length
-    ?tb.map(billItem).join('')
-    :`<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>No bills today yet</div>`;
+  const tb=bills.filter(function(b){ return b.date===tod; });
+  const total=tb.reduce(function(s,b){ return s+b.amount; }, 0);
+  const cats=Array.from(new Set(tb.map(function(b){ return b.cat; }))).length;
+  $('daily-metrics').innerHTML=
+    '<div class="metric"><div class="metric-label">Today</div><div class="metric-value">'+fmtRM(total)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Bills</div><div class="metric-value">'+tb.length+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Categories</div><div class="metric-value">'+cats+'</div></div>';
+  $('daily-list').innerHTML = tb.length
+    ? tb.map(billItem).join('')
+    : '<div class="empty">No bills today yet</div>';
 }
 
 function getWeekBounds(){
-  const d=new Date(),day=d.getDay(),mon=new Date(d);
-  mon.setDate(d.getDate()-(day===0?6:day-1));
-  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
-  return{start:mon.toISOString().split('T')[0],end:sun.toISOString().split('T')[0]};
+  const d=new Date(), day=d.getDay();
+  const mon=new Date(d); mon.setDate(d.getDate()-(day===0?6:day-1));
+  const sun=new Date(mon); sun.setDate(mon.getDate()+6);
+  return { start:mon.toISOString().split('T')[0], end:sun.toISOString().split('T')[0] };
 }
 
 function renderWeekly(){
-  const{start,end}=getWeekBounds();
-  const wb=bills.filter(b=>b.date>=start&&b.date<=end);
-  const total=wb.reduce((s,b)=>s+b.amount,0);
-  const avg=total/7;
-  document.getElementById('weekly-metrics').innerHTML=`
-    <div class="metric"><div class="metric-label">This week</div><div class="metric-value sm">${fmtRM(total)}</div></div>
-    <div class="metric"><div class="metric-label">Daily avg</div><div class="metric-value sm">${fmtRM(avg)}</div></div>`;
+  const w=getWeekBounds();
+  const wb=bills.filter(function(b){ return b.date>=w.start && b.date<=w.end; });
+  const total=wb.reduce(function(s,b){ return s+b.amount; }, 0);
+  $('weekly-metrics').innerHTML=
+    '<div class="metric"><div class="metric-label">This week</div><div class="metric-value">'+fmtRM(total)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Daily avg</div><div class="metric-value">'+fmtRM(total/7)+'</div></div>';
 
   const byCat={};
-  wb.forEach(b=>{byCat[b.cat]=(byCat[b.cat]||0)+b.amount});
-  const maxC=Math.max(...Object.values(byCat),1);
-  document.getElementById('weekly-cats').innerHTML=Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
-    <div class="bar-row">
-      <span class="bar-label">${CAT[cat]?.label||cat}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${(amt/maxC*100).toFixed(1)}%;background:${DOT_COLORS[cat]||'#888'}"></div></div>
-      <span class="bar-val">${fmtRM(amt)}</span>
-    </div>`).join('')||'<div class="empty" style="padding:1rem">No bills this week</div>';
+  wb.forEach(function(b){ byCat[b.cat]=(byCat[b.cat]||0)+b.amount; });
+  const maxC=Math.max.apply(null, Object.values(byCat).concat([1]));
+  const catHtml=Object.entries(byCat).sort(function(a,b){ return b[1]-a[1]; }).map(function(e){
+    const cat=e[0], amt=e[1];
+    const c=CAT[cat]||CAT.other;
+    return '<div class="bar-row"><span class="bar-label">'+c.label+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(amt/maxC*100).toFixed(1)+'%;background:'+c.dot+'"></div></div><span class="bar-val">'+fmtRM(amt)+'</span></div>';
+  }).join('');
+  $('weekly-cats').innerHTML = catHtml || '<div class="empty" style="padding:1rem">No bills this week</div>';
 
   const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
   const byDay={};
-  for(let i=0;i<7;i++){const d=new Date(start);d.setDate(d.getDate()+i);byDay[d.toISOString().split('T')[0]]=0}
-  wb.forEach(b=>{if(byDay[b.date]!==undefined)byDay[b.date]+=b.amount});
-  const maxD=Math.max(...Object.values(byDay),1);
-  document.getElementById('weekly-days').innerHTML=Object.entries(byDay).map(([date,amt],i)=>`
-    <div class="bar-row">
-      <span class="bar-label">${days[i]}</span>
-      <div class="bar-track"><div class="bar-fill" style="width:${(amt/maxD*100).toFixed(1)}%;background:#378ADD"></div></div>
-      <span class="bar-val">${amt>0?fmtRM(amt):'-'}</span>
-    </div>`).join('');
+  for(let i=0;i<7;i++){ const d=new Date(w.start); d.setDate(d.getDate()+i); byDay[d.toISOString().split('T')[0]]=0; }
+  wb.forEach(function(b){ if(byDay[b.date]!==undefined) byDay[b.date]+=b.amount; });
+  const maxD=Math.max.apply(null, Object.values(byDay).concat([1]));
+  $('weekly-days').innerHTML = Object.entries(byDay).map(function(e,i){
+    const amt=e[1];
+    return '<div class="bar-row"><span class="bar-label">'+days[i]+'</span><div class="bar-track"><div class="bar-fill" style="width:'+(amt/maxD*100).toFixed(1)+'%;background:#378ADD"></div></div><span class="bar-val">'+(amt>0?fmtRM(amt):'-')+'</span></div>';
+  }).join('');
 }
-
-    else{tb.forEach(b=>{lines.push(`• ${b.name} — RM ${b.amount.toFixed(2)}`);})}
-    lines.push('');
-    lines.push(`──────────────────`);
-    lines.push(`*Total: RM ${total.toFixed(2)}*`);
-  } else {
-    const wb=bills.filter(b=>b.date>=start&&b.date<=end);
-    const total=wb.reduce((s,b)=>s+b.amount,0);
-    lines.push(`📊 *Weekly Summary – ${fmtDate(start)} to ${fmtDate(end)}*`);
-    lines.push('');
-    const byCat={};
-    wb.forEach(b=>{byCat[b.cat]=(byCat[b.cat]||0)+b.amount});
-    if(Object.keys(byCat).length===0){lines.push('No bills this week.')}
-    else{
-      Object.entries(byCat).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt])=>{
-        lines.push(`• ${CAT[cat]?.label||cat}: RM ${amt.toFixed(2)}`);
-      });
-    }
-    lines.push('');
-    lines.push(`──────────────────`);
-    lines.push(`*Total: RM ${total.toFixed(2)}*`);
-    lines.push(`*Daily avg: RM ${(total/7).toFixed(2)}*`);
-  }
-  lines.push('');
-  lines.push('_Sent via BillTrack_');
-  return lines.join('\n');
-}
-
-
-
 
 function renderAll(){
-  const cat=document.getElementById('filter-cat').value;
-  const pay=document.getElementById('filter-pay').value;
+  const cat=$('filter-cat').value;
+  const pay=$('filter-pay').value;
   let filtered=bills;
-  if(cat)filtered=filtered.filter(b=>b.cat===cat);
-  if(pay)filtered=filtered.filter(b=>b.pay===pay);
-  document.getElementById('all-list').innerHTML=filtered.length
-    ?filtered.map(billItem).join('')
-    :`<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>No bills recorded yet</div>`;
-  if(filtered.length) initDrag('all-list', filtered);
+  if(cat) filtered=filtered.filter(function(b){ return b.cat===cat; });
+  if(pay) filtered=filtered.filter(function(b){ return b.pay===pay; });
+  $('all-list').innerHTML = filtered.length
+    ? filtered.map(billItem).join('')
+    : '<div class="empty">No bills recorded yet</div>';
 }
 
-let pendingReceiptBase64 = null;
-let pendingReceiptMime = null;
-let pendingReceiptName = null;
-
-async function handleReceipt(input){
-  const file=input.files[0];
-  if(!file)return;
-  const note=document.getElementById('receipt-note');
+// ───────── Receipt Scanning ─────────
+function handleReceiptFile(file){
+  if(!file) return;
+  const note=$('receipt-note');
   note.textContent='Reading receipt…';
   const reader=new FileReader();
-  reader.onload=async(e)=>{
-    const base64=e.target.result.split(',')[1];
-    const mt=file.type||'image/jpeg';
-    pendingReceiptBase64=base64;
-    pendingReceiptMime=mt;
-    pendingReceiptName=file.name;
-    // Show preview for images
-    if(mt.startsWith('image/')){
-      const prev=document.getElementById('receipt-preview');
-      const img=document.getElementById('receipt-img');
-      img.src=e.target.result;
-      prev.style.display='block';
+  reader.onload=async function(e){
+    const dataUrl=e.target.result;
+    const base64=dataUrl.split(',')[1];
+    const mt=file.type || 'image/jpeg';
+    pendingReceipt={ base64:base64, mime:mt };
+    if(mt.indexOf('image/')===0){
+      $('receipt-img').src=dataUrl;
+      $('receipt-preview').style.display='block';
     }
-    try{
-      // Step 1: AI scan for bill details
+    try {
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({
+        body: JSON.stringify({
           model:'claude-sonnet-4-20250514',
           max_tokens:400,
-          messages:[{role:'user',content:[
-            {type:mt==='application/pdf'?'document':'image',source:{type:'base64',media_type:mt,data:base64}},
-            {type:'text',text:`You are extracting expense data from an image. The image may be any of these:
-- A physical receipt or invoice
-- A screenshot of a bank transaction alert email (e.g. Standard Chartered, Maybank, CIMB, RHB, Hong Leong)
-- A screenshot of an e-wallet transaction (TNG, GrabPay, Boost)
-- A screenshot of an online banking transaction
-- A credit/debit card transaction notification
-
-Extract the following:
-1. "name": The merchant or payee name. For bank alert emails look for patterns like "successful at MERCHANT NAME", "payment to MERCHANT", "purchase at MERCHANT". Clean up truncated names (e.g. "BANH MI 77 G.." → "Banh Mi 77"). For transfers use the recipient name.
-2. "amount": The transaction amount as a plain number (no currency symbol). For Malaysian bank emails look for "MYR XX.XX" or "RM XX.XX". Use the purchase/debit amount, not any fee.
-3. "date": Transaction date in YYYY-MM-DD format. Look for dates in the email header, alert timestamp, or transaction details. If only time is shown use today's date.
-4. "cat": Best guess category — one of: food, grocery, transport, utilities, health, entertainment, other. Infer from merchant name (e.g. restaurant → food, Petronas → transport, pharmacy → health).
-5. "pay": Payment method — one of: applepay, tng, grabpay, debit, credit, cash, bank, boost, other. Infer from context (e.g. Standard Chartered/Maybank/CIMB email → credit or debit, TNG screenshot → tng, GrabPay → grabpay, Apple Pay notification → applepay). Default to "other" if unclear.
-
-Reply ONLY with raw JSON, no markdown, no explanation:
-{"name":"...","amount":0.00,"date":"YYYY-MM-DD","cat":"food","pay":"credit"}
-
-Today's date is ${today()}. If anything is truly unclear use: name="Unknown", amount=0, date today, cat="other".`}
+          messages:[{role:'user', content:[
+            { type: mt==='application/pdf' ? 'document' : 'image', source:{type:'base64',media_type:mt,data:base64} },
+            { type:'text', text:'Extract from this receipt or bank/wallet transaction screenshot: merchant name, amount as number, date YYYY-MM-DD, category (food/grocery/transport/utilities/health/entertainment/other), payment method (applepay/tng/grabpay/debit/credit/cash/bank/boost/other). Reply ONLY JSON: {"name":"...","amount":0.00,"date":"YYYY-MM-DD","cat":"food","pay":"credit"}. Today is '+today()+'.' }
           ]}]
         })
       });
       const data=await res.json();
-      const txt=data.content.map(i=>i.text||'').join('');
+      const txt=data.content.map(function(i){ return i.text||''; }).join('');
       const clean=txt.replace(/```json|```/g,'').trim();
       const parsed=JSON.parse(clean);
-      if(parsed.name)document.getElementById('b-name').value=parsed.name;
-      if(parsed.amount)document.getElementById('b-amount').value=parsed.amount;
-      if(parsed.date)document.getElementById('b-date').value=parsed.date;
-      if(parsed.cat){const sel=document.getElementById('b-cat');if([...sel.options].some(o=>o.value===parsed.cat))sel.value=parsed.cat;}
-      if(parsed.pay){const sel=document.getElementById('b-pay');if([...sel.options].some(o=>o.value===parsed.pay))sel.value=parsed.pay;}
-      const srcLabel = parsed.name && parsed.name!=='Unknown' ? `<strong>${parsed.name}</strong> — RM ${parsed.amount} detected` : 'Details filled in';
-      note.innerHTML='✓ '+srcLabel+' — review then tap <strong>Add bill</strong>.';
-    }catch(err){
-      note.textContent='Could not read receipt. Please fill in manually.';
+      if(parsed.name) $('b-name').value=parsed.name;
+      if(parsed.amount) $('b-amount').value=parsed.amount;
+      if(parsed.date) $('b-date').value=parsed.date;
+      if(parsed.cat){ const sel=$('b-cat'); if(Array.from(sel.options).some(function(o){ return o.value===parsed.cat; })) sel.value=parsed.cat; }
+      if(parsed.pay){ const sel=$('b-pay'); if(Array.from(sel.options).some(function(o){ return o.value===parsed.pay; })) sel.value=parsed.pay; }
+      note.innerHTML='✓ '+(parsed.name||'Receipt')+' — RM '+(parsed.amount||0)+' detected. Review and tap Add bill.';
+    } catch(err){
+      note.textContent='Could not auto-read. Please fill in manually.';
     }
   };
   reader.readAsDataURL(file);
 }
 
-async function uploadReceiptToDrive(billName, billDate){
-  if(!pendingReceiptBase64)return null;
-  try{
-    const fname='Receipt_'+billName.replace(/[^a-zA-Z0-9]/g,'_')+'_'+billDate+(pendingReceiptMime==='application/pdf'?'.pdf':'.jpg');
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:500,
-        messages:[{role:'user',content:`Upload a receipt file named "${fname}" to a folder called "BillTrack/Receipts" in Google Drive. The file is base64 encoded: data:${pendingReceiptMime};base64,${pendingReceiptBase64}. Create the folder if it doesn't exist. Return ONLY JSON: {"fileId":"...","webViewLink":"..."}`}],
-        mcp_servers:[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'gdrive'}]
-      })
-    });
-    const data=await res.json();
-    const txt=data.content.map(i=>i.text||'').join('');
-    const clean=txt.replace(/```json|```/g,'').trim();
-    const match=clean.match(/\{[^}]*"webViewLink"[^}]*\}/);
-    if(match){
-      const parsed=JSON.parse(match[0]);
-      pendingReceiptBase64=null;pendingReceiptMime=null;pendingReceiptName=null;
-      return parsed.webViewLink||parsed.fileId||null;
+// ───────── Event Wiring ─────────
+function init(){
+  // Nav tabs — use addEventListener with both click and touchend
+  ['add','daily','weekly','all'].forEach(function(t){
+    const el=$('nav-'+t);
+    el.addEventListener('click', function(){ showTab(t); });
+  });
+
+  // Add button
+  $('add-btn').addEventListener('click', addBill);
+
+  // Payment method toggle
+  $('b-pay').addEventListener('change', function(){
+    $('b-pay-custom').style.display = this.value==='other' ? 'block' : 'none';
+    if(this.value!=='other') $('b-pay-custom').value='';
+  });
+
+  // Receipt buttons
+  $('cam-btn').addEventListener('click', function(){ $('camera-input').click(); });
+  $('up-btn').addEventListener('click', function(){ $('upload-input').click(); });
+  $('camera-input').addEventListener('change', function(e){ handleReceiptFile(e.target.files[0]); });
+  $('upload-input').addEventListener('change', function(e){ handleReceiptFile(e.target.files[0]); });
+
+  // Filters
+  $('filter-cat').addEventListener('change', renderAll);
+  $('filter-pay').addEventListener('change', renderAll);
+  $('clear-btn').addEventListener('click', clearAll);
+
+  // Delete buttons (event delegation)
+  document.body.addEventListener('click', function(e){
+    const del=e.target.closest('[data-del]');
+    if(del){
+      e.preventDefault();
+      deleteBill(parseInt(del.dataset.del));
     }
-    return null;
-  }catch(e){
-    return null;
+  });
+
+  // Set default date
+  $('b-date').value=today();
+
+  // URL params (Apple Pay shortcut integration)
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('amount')){
+    const a=parseFloat(p.get('amount'));
+    if(!isNaN(a) && a>0){
+      bills.unshift({
+        id:Date.now(),
+        name:p.get('name')||'Apple Pay',
+        amount:a,
+        cat:p.get('cat')||'other',
+        pay:p.get('source')||'applepay',
+        date:p.get('date')||today(),
+        driveLink:null
+      });
+      save();
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(function(){ toast('✓ Auto-added: RM '+a.toFixed(2)); }, 500);
+    }
   }
 }
 
-// ── Drag & drop reordering ──────────────────────────────
-function initDrag(containerId, filteredList){
-  const container = document.getElementById(containerId);
-  if(!container) return;
-  let dragSrcId = null;
-  let touchDragId = null;
-  let touchClone = null;
-  let touchStartY = 0;
-
-  container.querySelectorAll('.bill-item').forEach(item => {
-    // Desktop drag events
-    item.addEventListener('dragstart', e => {
-      dragSrcId = parseInt(item.dataset.id);
-      item.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    item.addEventListener('dragend', () => {
-      item.classList.remove('dragging');
-      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
-    });
-    item.addEventListener('dragover', e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
-      item.classList.add('drag-over');
-    });
-    item.addEventListener('drop', e => {
-      e.preventDefault();
-      const dropId = parseInt(item.dataset.id);
-      if(dragSrcId === dropId) return;
-      reorderBills(dragSrcId, dropId, filteredList);
-    });
-
-    // Touch drag events (mobile)
-    const handle = item.querySelector('.drag-handle');
-    if(!handle) return;
-    handle.addEventListener('touchstart', e => {
-      touchDragId = parseInt(item.dataset.id);
-      touchStartY = e.touches[0].clientY;
-      // Create floating clone
-      touchClone = item.cloneNode(true);
-      touchClone.style.cssText = `position:fixed;left:${item.getBoundingClientRect().left}px;top:${item.getBoundingClientRect().top}px;width:${item.offsetWidth}px;opacity:0.85;z-index:9999;pointer-events:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);`;
-      document.body.appendChild(touchClone);
-      item.classList.add('dragging');
-      e.preventDefault();
-    }, {passive:false});
-
-    handle.addEventListener('touchmove', e => {
-      if(!touchClone) return;
-      const dy = e.touches[0].clientY - touchStartY;
-      const rect = item.getBoundingClientRect();
-      touchClone.style.top = (rect.top + dy) + 'px';
-      // Find item under touch
-      const els = document.elementsFromPoint(e.touches[0].clientX, e.touches[0].clientY);
-      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
-      const target = els.find(el => el.classList.contains('bill-item') && el !== item);
-      if(target) target.classList.add('drag-over');
-      e.preventDefault();
-    }, {passive:false});
-
-    handle.addEventListener('touchend', e => {
-      if(touchClone){document.body.removeChild(touchClone); touchClone=null;}
-      item.classList.remove('dragging');
-      container.querySelectorAll('.bill-item').forEach(i => i.classList.remove('drag-over'));
-      const touch = e.changedTouches[0];
-      const els = document.elementsFromPoint(touch.clientX, touch.clientY);
-      const target = els.find(el => el.classList.contains('bill-item') && parseInt(el.dataset.id) !== touchDragId);
-      if(target){
-        reorderBills(touchDragId, parseInt(target.dataset.id), filteredList);
-      }
-      touchDragId = null;
-    });
-  });
+// Boot
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  init();
 }
 
-function reorderBills(srcId, dstId, filteredList){
-  // Work on global bills array — find positions
-  const srcIdx = bills.findIndex(b => b.id === srcId);
-  const dstIdx = bills.findIndex(b => b.id === dstId);
-  if(srcIdx === -1 || dstIdx === -1) return;
-  const [moved] = bills.splice(srcIdx, 1);
-  bills.splice(dstIdx, 0, moved);
-  save();
-  renderAll();
-  renderDaily();
-  renderWeekly();
-}
+})();
 </script>
 </body>
 </html>

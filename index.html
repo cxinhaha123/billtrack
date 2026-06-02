@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BillTrack – My Expense Diary</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F2EC;
+  --surface:#FFFEFB;
+  --surface2:#F0EDE6;
+  --ink:#1A1812;
+  --ink2:#6B6659;
+  --ink3:#A09D94;
+  --accent:#C9430A;
+  --accent2:#E8A87C;
+  --green:#2D6A4F;
+  --green-bg:#D8F3DC;
+  --blue:#1B4F7A;
+  --blue-bg:#DAEAF5;
+  --amber:#7A4F00;
+  --amber-bg:#FFF3CD;
+  --pink:#7A1B4F;
+  --pink-bg:#F5D5E8;
+  --teal:#0D6E5B;
+  --teal-bg:#D4EDE8;
+  --purple:#3D2B8A;
+  --purple-bg:#E8E4F7;
+  --gray:#4A4740;
+  --gray-bg:#EBEBEB;
+  --border:#E0DBD2;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(26,24,18,0.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100vh;
+  font-size:15px;
+}
+/* Header */
+.header{
+  background:var(--ink);
+  color:#fff;
+  padding:18px 20px 16px;
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.header h1{
+  font-family:'DM Serif Display',serif;
+  font-size:22px;
+  letter-spacing:-0.3px;
+}
+.header span{
+  font-size:12px;
+  opacity:0.5;
+  font-weight:300;
+}
+/* Nav tabs */
+.nav{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  overflow-x:auto;
+  scrollbar-width:none;
+  position:sticky;
+  top:56px;
+  z-index:99;
+}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{
+  flex:1;
+  min-width:70px;
+  padding:13px 8px 11px;
+  border:none;
+  background:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px;
+  color:var(--ink3);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  transition:color 0.15s;
+  white-space:nowrap;
+}
+.nav-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
+.nav-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:500}
+/* Content */
+.content{padding:16px;max-width:480px;margin:0 auto}
+/* Cards */
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:16px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+}
+/* Metrics */
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.metrics.three{grid-template-columns:1fr 1fr 1fr}
+.metric{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 12px;
+}
+.metric-label{font-size:11px;color:var(--ink3);letter-spacing:0.04em;text-transform:uppercase;margin-bottom:4px}
+.metric-value{font-family:'DM Serif Display',serif;font-size:26px;color:var(--ink);line-height:1}
+.metric-value.sm{font-size:20px}
+/* Form */
+.form-label{font-size:12px;color:var(--ink2);margin-bottom:5px;display:block;font-weight:500}
+.form-input{
+  width:100%;
+  padding:10px 12px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:15px;
+  background:var(--bg);
+  color:var(--ink);
+  transition:border-color 0.15s;
+  -webkit-appearance:none;
+}
+.form-input:focus{outline:none;border-color:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.form-group{margin-bottom:12px}
+/* Buttons */
+.btn{
+  padding:11px 18px;
+  border-radius:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  border:1px solid var(--border);
+  background:var(--surface);
+  color:var(--ink);
+  transition:all 0.15s;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.btn:hover{background:var(--surface2)}
+.btn-primary{
+  background:var(--accent);
+  color:#fff;
+  border-color:var(--accent);
+  width:100%;
+  justify-content:center;
+  font-size:15px;
+  padding:13px;
+}
+.btn-primary:hover{background:#A8350A}
+.btn-wa{
+  background:#25D366;
+  color:#fff;
+  border-color:#25D366;
+  width:100%;
+  justify-content:center;
+  font-size:14px;
+  padding:12px;
+  margin-top:8px;
+}
+.btn-wa:hover{background:#1da851}
+.btn-copy{
+  background:var(--blue-bg);
+  color:var(--blue);
+  border-color:#B8D4EB;
+  width:100%;
+  justify-content:center;
+  font-size:14px;
+  padding:12px;
+  margin-top:8px;
+}
+/* Upload area */
+.upload-area{
+  border:1.5px dashed var(--border);
+  border-radius:var(--radius);
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  color:var(--ink3);
+  font-size:13px;
+  transition:all 0.15s;
+  margin-bottom:14px;
+}
+.upload-area:hover{border-color:var(--accent);color:var(--accent);background:rgba(201,67,10,0.03)}
+.upload-area svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.5;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto}
+/* Bill items */
+.bill-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 0;
+  border-bottom:1px solid var(--border);
+}
+.bill-item:last-child{border-bottom:none}
+.bill-dot{
+  width:8px;height:8px;border-radius:50%;flex-shrink:0;
+}
+.bill-info{flex:1;min-width:0}
+.bill-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bill-meta{font-size:12px;color:var(--ink3);margin-top:1px}
+.bill-amount{font-size:15px;font-weight:500;white-space:nowrap;font-family:'DM Serif Display',serif}
+.del-btn{
+  background:none;border:none;cursor:pointer;
+  color:var(--ink3);font-size:18px;line-height:1;
+  padding:4px 6px;border-radius:4px;
+  transition:all 0.1s;flex-shrink:0;
+}
+.del-btn:hover{background:var(--surface2);color:var(--accent)}
+/* Category badge */
+.cat-badge{
+  font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;white-space:nowrap;flex-shrink:0;
+}
+/* Bar charts */
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bar-label{font-size:12px;color:var(--ink2);min-width:80px}
+.bar-track{flex:1;background:var(--surface2);border-radius:4px;height:7px;overflow:hidden}
+.bar-fill{height:7px;border-radius:4px;transition:width 0.4s ease}
+.bar-val{font-size:12px;color:var(--ink2);min-width:68px;text-align:right}
+/* Section title */
+.sec-title{
+  font-size:11px;font-weight:500;letter-spacing:0.07em;
+  text-transform:uppercase;color:var(--ink3);margin-bottom:12px;
+}
+/* Empty state */
+.empty{
+  text-align:center;padding:2.5rem 1rem;
+  color:var(--ink3);font-size:14px;line-height:1.6;
+}
+.empty svg{width:40px;height:40px;stroke:currentColor;fill:none;stroke-width:1.2;margin:0 auto 10px;display:block;opacity:0.4}
+/* Toast */
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:#fff;padding:10px 20px;
+  border-radius:20px;font-size:13px;transition:transform 0.3s;z-index:999;
+  white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+/* Receipt status */
+.receipt-note{font-size:12px;color:var(--ink3);margin-top:6px;min-height:16px}
+/* WhatsApp preview */
+.wa-preview{
+  background:#ECE5DD;
+  border-radius:var(--radius);
+  padding:14px;
+  font-family:monospace;
+  font-size:12px;
+  color:#111;
+  white-space:pre-wrap;
+  line-height:1.6;
+  margin-bottom:10px;
+  max-height:200px;
+  overflow-y:auto;
+}
+/* Filter */
+.filter-select{
+  padding:8px 12px;border:1px solid var(--border);border-radius:8px;
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  background:var(--surface);color:var(--ink);
+  -webkit-appearance:none;
+}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>BillTrack</h1>
+  <span>Penang Expense Diary</span>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('add')" id="nav-add">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    Add
+  </button>
+  <button class="nav-btn" onclick="showTab('daily')" id="nav-daily">
+    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Today
+  </button>
+  <button class="nav-btn" onclick="showTab('weekly')" id="nav-weekly">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    Week
+  </button>
+  <button class="nav-btn" onclick="showTab('share')" id="nav-share">
+    <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 0 0 0 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+    Share
+  </button>
+  <button class="nav-btn" onclick="showTab('all')" id="nav-all">
+    <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>
+    All
+  </button>
+</nav>
+
+<!-- ADD TAB -->
+<div id="tab-add" class="content">
+  <div class="card">
+    <div class="sec-title">Scan receipt</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <button class="receipt-btn" onclick="document.getElementById('camera-input').click()" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;cursor:pointer;color:var(--ink2);font-family:inherit;font-size:13px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">
+        <svg width="26" height="26" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        Take photo
+        <input type="file" id="camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleReceipt(this)">
+      </button>
+      <button class="receipt-btn" onclick="document.getElementById('upload-input').click()" style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;cursor:pointer;color:var(--ink2);font-family:inherit;font-size:13px;transition:all 0.15s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--ink2)'">
+        <svg width="26" height="26" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.6"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload file
+        <input type="file" id="upload-input" accept="image/*,.pdf" style="display:none" onchange="handleReceipt(this)">
+      </button>
+    </div>
+    <div id="receipt-preview" style="display:none;margin-bottom:8px;text-align:center">
+      <img id="receipt-img" style="max-width:100%;max-height:160px;border-radius:8px;border:1px solid var(--border);object-fit:contain" alt="Receipt preview">
+    </div>
+    <div class="receipt-note" id="receipt-note"></div>
+  </div>
+
+  <div class="card">
+    <div class="sec-title">Manual entry</div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <input class="form-input" type="text" id="b-name" placeholder="e.g. Grab food, TNB bill…">
+    </div>
+    <div class="form-row">
+      <div>
+        <label class="form-label">Amount (RM)</label>
+        <input class="form-input" type="number" id="b-amount" placeholder="0.00" min="0" step="0.01">
+      </div>
+      <div>
+        <label class="form-label">Date</label>
+        <input class="form-input" type="date" id="b-date">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Category</label>
+      <select class="form-input" id="b-cat">
+        <option value="food">🍜 Food & drink</option>
+        <option value="grocery">🛒 Grocery</option>
+        <option value="transport">🚗 Transport</option>
+        <option value="utilities">💡 Utilities</option>
+        <option value="health">💊 Health</option>
+        <option value="entertainment">🎬 Entertainment</option>
+        <option value="other">📦 Other</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" id="add-btn" onclick="addBill()">Add bill</button>
+  </div>
+</div>
+
+<!-- DAILY TAB -->
+<div id="tab-daily" class="content hidden">
+  <div class="metrics three" id="daily-metrics"></div>
+  <div class="card">
+    <div class="sec-title">Today's bills</div>
+    <div id="daily-list"></div>
+  </div>
+</div>
+
+<!-- WEEKLY TAB -->
+<div id="tab-weekly" class="content hidden">
+  <div class="metrics" id="weekly-metrics"></div>
+  <div class="card">
+    <div class="sec-title">By category</div>
+    <div id="weekly-cats"></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Day by day</div>
+    <div id="weekly-days"></div>
+  </div>
+</div>
+
+<!-- SHARE TAB -->
+<div id="tab-share" class="content hidden">
+  <div class="card">
+    <div class="sec-title">Share summary</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn" id="share-daily-btn" onclick="setShareMode('daily')" style="flex:1;justify-content:center">Today</button>
+      <button class="btn" id="share-weekly-btn" onclick="setShareMode('weekly')" style="flex:1;justify-content:center">This week</button>
+    </div>
+    <div class="wa-preview" id="wa-preview"></div>
+    <button class="btn-copy btn" onclick="copyText()">
+      <svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+      Copy text
+    </button>
+    <button class="btn-wa btn" onclick="shareWA()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.096.537 4.072 1.482 5.797L0 24l6.38-1.452A11.948 11.948 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.89 0-3.663-.497-5.195-1.367l-.373-.219-3.789.862.886-3.697-.241-.383A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Open in WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- ALL BILLS TAB -->
+<div id="tab-all" class="content hidden">
+  <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center">
+    <select class="filter-select" id="filter-cat" onchange="renderAll()" style="flex:1">
+      <option value="">All categories</option>
+      <option value="food">Food & drink</option>
+      <option value="grocery">Grocery</option>
+      <option value="transport">Transport</option>
+      <option value="utilities">Utilities</option>
+      <option value="health">Health</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="other">Other</option>
+    </select>
+    <button class="btn" style="font-size:13px;padding:8px 12px;color:var(--accent);border-color:var(--accent)" onclick="clearAll()">Clear all</button>
+  </div>
+  <div id="all-list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let bills = JSON.parse(localStorage.getItem('billtrack_v2') || '[]');
+let shareMode = 'daily';
+
+// Apple Pay Shortcut auto-add via URL params
+// Usage: billtrack.html?name=Starbucks&amount=12.50&cat=food&source=applepay
+(function handleURLParams(){
+  const p = new URLSearchParams(window.location.search);
+  if(!p.get('amount')) return;
+  const name    = p.get('name')   || 'Apple Pay';
+  const amount  = parseFloat(p.get('amount'));
+  const cat     = p.get('cat')    || 'other';
+  const source  = p.get('source') || '';
+  const dateVal = p.get('date')   || new Date().toISOString().split('T')[0];
+  if(isNaN(amount)||amount<=0) return;
+  bills.unshift({id:Date.now(), name, amount, cat, date:dateVal, driveLink:null, source});
+  try{localStorage.setItem('billtrack_v2', JSON.stringify(bills));}catch(e){}
+  // Clean URL so refresh doesn't duplicate
+  window.history.replaceState({}, '', window.location.pathname);
+  // Show confirmation banner after page loads
+  window.addEventListener('DOMContentLoaded', ()=>{
+    setTimeout(()=>toast('✓ Apple Pay — '+name+' RM '+amount.toFixed(2)+' added'), 400);
+  });
+})();
+
+const CAT = {
+  food:{label:'Food & drink',color:'#2D6A4F',bg:'#D8F3DC'},
+  grocery:{label:'Grocery',color:'#0D6E5B',bg:'#D4EDE8'},
+  transport:{label:'Transport',color:'#1B4F7A',bg:'#DAEAF5'},
+  utilities:{label:'Utility',color:'#7A4F00',bg:'#FFF3CD'},
+  health:{label:'Health',color:'#7A1B4F',bg:'#F5D5E8'},
+  entertainment:{label:'Entertain',color:'#3D2B8A',bg:'#E8E4F7'},
+  other:{label:'Other',color:'#4A4740',bg:'#EBEBEB'}
+};
+const DOT_COLORS = {food:'#2D6A4F',grocery:'#0D6E5B',transport:'#1B4F7A',utilities:'#BA7517',health:'#D4537E',entertainment:'#7F77DD',other:'#888780'};
+
+function save(){localStorage.setItem('billtrack_v2',JSON.stringify(bills))}
+
+function today(){return new Date().toISOString().split('T')[0]}
+function fmtDate(d){const[y,m,dd]=d.split('-');return`${dd}/${m}/${y}`}
+function fmtRM(n){return'RM '+n.toFixed(2)}
+
+document.getElementById('b-date').value = today();
+
+function showTab(t){
+  ['add','daily','weekly','share','all'].forEach(id=>{
+    document.getElementById('tab-'+id).classList.add('hidden');
+    document.getElementById('nav-'+id).classList.remove('active');
+  });
+  document.getElementById('tab-'+t).classList.remove('hidden');
+  document.getElementById('nav-'+t).classList.add('active');
+  if(t==='daily')renderDaily();
+  if(t==='weekly')renderWeekly();
+  if(t==='share'){setShareMode(shareMode)}
+  if(t==='all')renderAll();
+}
+
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2200);
+}
+
+async function addBill(){
+  const name=document.getElementById('b-name').value.trim();
+  const amount=parseFloat(document.getElementById('b-amount').value);
+  const cat=document.getElementById('b-cat').value;
+  const date=document.getElementById('b-date').value;
+  if(!name||isNaN(amount)||amount<=0){toast('Please enter description and amount');return;}
+  const btn=document.getElementById('add-btn');
+  btn.textContent='Saving…';btn.disabled=true;
+  let driveLink=null;
+  if(pendingReceiptBase64){
+    const note=document.getElementById('receipt-note');
+    note.textContent='Uploading receipt to Google Drive…';
+    driveLink=await uploadReceiptToDrive(name,date);
+    note.innerHTML=driveLink
+      ?'✓ Saved to Google Drive — <a href="'+driveLink+'" target="_blank" style="color:var(--accent)">view receipt</a>'
+      :'Receipt upload failed — bill saved without attachment.';
+  }
+  bills.unshift({id:Date.now(),name,amount,cat,date,driveLink});
+  save();
+  document.getElementById('b-name').value='';
+  document.getElementById('b-amount').value='';
+  document.getElementById('b-date').value=today();
+  document.getElementById('receipt-preview').style.display='none';
+  document.getElementById('receipt-img').src='';
+  btn.textContent='✓ Saved!';btn.disabled=false;
+  setTimeout(()=>btn.textContent='Add bill',1400);
+  toast(driveLink?'Bill added + receipt on Drive':'Bill added');
+}
+
+function deleteBill(id){
+  if(!confirm('Delete this bill?'))return;
+  bills=bills.filter(b=>b.id!==id);save();
+  renderDaily();renderWeekly();renderAll();toast('Deleted');
+}
+
+function clearAll(){
+  if(!confirm('Delete ALL bills? This cannot be undone.'))return;
+  bills=[];save();renderAll();toast('All bills cleared');
+}
+
+function billItem(b){
+  const c=CAT[b.cat]||CAT.other;
+  const driveIcon=b.driveLink
+    ?`<a href="${b.driveLink}" target="_blank" title="View receipt on Google Drive" style="color:#2D6A4F;display:flex;align-items:center;padding:4px 5px;border-radius:4px;text-decoration:none;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 87.3 78" fill="currentColor"><path d="M6.6 66.85l3.85 6.65c.8 1.4 1.95 2.5 3.3 3.3L27.5 53.4H0c0 1.55.4 3.1 1.2 4.5zm73.7-40.2L66.6 3.4C65.8 2 64.65.9 63.3.1L50 23.7h26.5c0-1.55-.4-3.1-1.2-4.5zM43.65 26.9L30.5 3.4c-1.35.8-2.5 1.9-3.3 3.3L1 51.95c-.8 1.4-1.2 2.95-1.2 4.5h28.7zm7.2 3.8h26.5l-26.5-45.9c-1.35-.8-2.9-1.2-4.5-1.2s-3.15.4-4.5 1.2L28.5 30.7h26.5zM27.5 56.8l-13.8 23.9c1.35.8 2.9 1.2 4.5 1.2h63.3c1.6 0 3.15-.4 4.5-1.2L72.25 56.8H27.5z"/></svg>
+      </a>`
+    :'';
+  return`<div class="bill-item">
+    <div class="bill-dot" style="background:${DOT_COLORS[b.cat]||'#888'}"></div>
+    <div class="bill-info">
+      <div class="bill-name">${b.name}</div>
+      <div class="bill-meta"><span class="cat-badge" style="background:${c.bg};color:${c.color}">${c.label}</span> · ${fmtDate(b.date)}</div>
+    </div>
+    <div class="bill-amount">${fmtRM(b.amount)}</div>
+    ${driveIcon}
+    <button class="del-btn" onclick="deleteBill(${b.id})" title="Delete">x</button>
+  </div>`;
+}
+
+function renderDaily(){
+  const tod=today();
+  const tb=bills.filter(b=>b.date===tod);
+  const total=tb.reduce((s,b)=>s+b.amount,0);
+  const cats=[...new Set(tb.map(b=>b.cat))].length;
+  document.getElementById('daily-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">Total today</div><div class="metric-value sm">${fmtRM(total)}</div></div>
+    <div class="metric"><div class="metric-label">Bills</div><div class="metric-value">${tb.length}</div></div>
+    <div class="metric"><div class="metric-label">Categories</div><div class="metric-value">${cats}</div></div>`;
+  document.getElementById('daily-list').innerHTML=tb.length
+    ?tb.map(billItem).join('')
+    :`<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>No bills today yet</div>`;
+}
+
+function getWeekBounds(){
+  const d=new Date(),day=d.getDay(),mon=new Date(d);
+  mon.setDate(d.getDate()-(day===0?6:day-1));
+  const sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  return{start:mon.toISOString().split('T')[0],end:sun.toISOString().split('T')[0]};
+}
+
+function renderWeekly(){
+  const{start,end}=getWeekBounds();
+  const wb=bills.filter(b=>b.date>=start&&b.date<=end);
+  const total=wb.reduce((s,b)=>s+b.amount,0);
+  const avg=total/7;
+  document.getElementById('weekly-metrics').innerHTML=`
+    <div class="metric"><div class="metric-label">This week</div><div class="metric-value sm">${fmtRM(total)}</div></div>
+    <div class="metric"><div class="metric-label">Daily avg</div><div class="metric-value sm">${fmtRM(avg)}</div></div>`;
+
+  const byCat={};
+  wb.forEach(b=>{byCat[b.cat]=(byCat[b.cat]||0)+b.amount});
+  const maxC=Math.max(...Object.values(byCat),1);
+  document.getElementById('weekly-cats').innerHTML=Object.entries(byCat).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
+    <div class="bar-row">
+      <span class="bar-label">${CAT[cat]?.label||cat}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${(amt/maxC*100).toFixed(1)}%;background:${DOT_COLORS[cat]||'#888'}"></div></div>
+      <span class="bar-val">${fmtRM(amt)}</span>
+    </div>`).join('')||'<div class="empty" style="padding:1rem">No bills this week</div>';
+
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const byDay={};
+  for(let i=0;i<7;i++){const d=new Date(start);d.setDate(d.getDate()+i);byDay[d.toISOString().split('T')[0]]=0}
+  wb.forEach(b=>{if(byDay[b.date]!==undefined)byDay[b.date]+=b.amount});
+  const maxD=Math.max(...Object.values(byDay),1);
+  document.getElementById('weekly-days').innerHTML=Object.entries(byDay).map(([date,amt],i)=>`
+    <div class="bar-row">
+      <span class="bar-label">${days[i]}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${(amt/maxD*100).toFixed(1)}%;background:#378ADD"></div></div>
+      <span class="bar-val">${amt>0?fmtRM(amt):'-'}</span>
+    </div>`).join('');
+}
+
+function buildShareText(mode){
+  const tod=today();
+  const{start,end}=getWeekBounds();
+  let lines=[];
+  if(mode==='daily'){
+    const tb=bills.filter(b=>b.date===tod);
+    const total=tb.reduce((s,b)=>s+b.amount,0);
+    lines.push(`📋 *Daily Summary – ${fmtDate(tod)}*`);
+    lines.push('');
+    if(tb.length===0){lines.push('No bills recorded today.')}
+    else{tb.forEach(b=>{lines.push(`• ${b.name} — RM ${b.amount.toFixed(2)}`);})}
+    lines.push('');
+    lines.push(`──────────────────`);
+    lines.push(`*Total: RM ${total.toFixed(2)}*`);
+  } else {
+    const wb=bills.filter(b=>b.date>=start&&b.date<=end);
+    const total=wb.reduce((s,b)=>s+b.amount,0);
+    lines.push(`📊 *Weekly Summary – ${fmtDate(start)} to ${fmtDate(end)}*`);
+    lines.push('');
+    const byCat={};
+    wb.forEach(b=>{byCat[b.cat]=(byCat[b.cat]||0)+b.amount});
+    if(Object.keys(byCat).length===0){lines.push('No bills this week.')}
+    else{
+      Object.entries(byCat).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt])=>{
+        lines.push(`• ${CAT[cat]?.label||cat}: RM ${amt.toFixed(2)}`);
+      });
+    }
+    lines.push('');
+    lines.push(`──────────────────`);
+    lines.push(`*Total: RM ${total.toFixed(2)}*`);
+    lines.push(`*Daily avg: RM ${(total/7).toFixed(2)}*`);
+  }
+  lines.push('');
+  lines.push('_Sent via BillTrack_');
+  return lines.join('\n');
+}
+
+function setShareMode(mode){
+  shareMode=mode;
+  document.getElementById('share-daily-btn').style.background=mode==='daily'?'var(--accent)':'';
+  document.getElementById('share-daily-btn').style.color=mode==='daily'?'#fff':'';
+  document.getElementById('share-daily-btn').style.borderColor=mode==='daily'?'var(--accent)':'';
+  document.getElementById('share-weekly-btn').style.background=mode==='weekly'?'var(--accent)':'';
+  document.getElementById('share-weekly-btn').style.color=mode==='weekly'?'#fff':'';
+  document.getElementById('share-weekly-btn').style.borderColor=mode==='weekly'?'var(--accent)':'';
+  document.getElementById('wa-preview').textContent=buildShareText(mode);
+}
+
+function copyText(){
+  const txt=buildShareText(shareMode);
+  navigator.clipboard.writeText(txt).then(()=>toast('Copied to clipboard!')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('Copied!');
+  });
+}
+
+function shareWA(){
+  const txt=buildShareText(shareMode);
+  const url='https://wa.me/?text='+encodeURIComponent(txt);
+  window.open(url,'_blank');
+}
+
+function renderAll(){
+  const cat=document.getElementById('filter-cat').value;
+  const filtered=cat?bills.filter(b=>b.cat===cat):bills;
+  document.getElementById('all-list').innerHTML=filtered.length
+    ?filtered.map(billItem).join('')
+    :`<div class="empty"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1"/><circle cx="3" cy="12" r="1"/><circle cx="3" cy="18" r="1"/></svg>No bills recorded yet</div>`;
+}
+
+let pendingReceiptBase64 = null;
+let pendingReceiptMime = null;
+let pendingReceiptName = null;
+
+async function handleReceipt(input){
+  const file=input.files[0];
+  if(!file)return;
+  const note=document.getElementById('receipt-note');
+  note.textContent='Reading receipt…';
+  const reader=new FileReader();
+  reader.onload=async(e)=>{
+    const base64=e.target.result.split(',')[1];
+    const mt=file.type||'image/jpeg';
+    pendingReceiptBase64=base64;
+    pendingReceiptMime=mt;
+    pendingReceiptName=file.name;
+    // Show preview for images
+    if(mt.startsWith('image/')){
+      const prev=document.getElementById('receipt-preview');
+      const img=document.getElementById('receipt-img');
+      img.src=e.target.result;
+      prev.style.display='block';
+    }
+    try{
+      // Step 1: AI scan for bill details
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:400,
+          messages:[{role:'user',content:[
+            {type:mt==='application/pdf'?'document':'image',source:{type:'base64',media_type:mt,data:base64}},
+            {type:'text',text:'Extract from this receipt: merchant name/description, total amount as a number, and date as YYYY-MM-DD. Reply ONLY with JSON: {"name":"...","amount":0.00,"date":"YYYY-MM-DD"}. If no date found use '+today()+'. If amount unclear use 0.'}
+          ]}]
+        })
+      });
+      const data=await res.json();
+      const txt=data.content.map(i=>i.text||'').join('');
+      const clean=txt.replace(/```json|```/g,'').trim();
+      const parsed=JSON.parse(clean);
+      if(parsed.name)document.getElementById('b-name').value=parsed.name;
+      if(parsed.amount)document.getElementById('b-amount').value=parsed.amount;
+      if(parsed.date)document.getElementById('b-date').value=parsed.date;
+      note.innerHTML='✓ Receipt scanned — review then tap <strong>Add bill</strong>. Receipt will be saved to Google Drive automatically.';
+    }catch(err){
+      note.textContent='Could not read receipt. Please fill in manually.';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+async function uploadReceiptToDrive(billName, billDate){
+  if(!pendingReceiptBase64)return null;
+  try{
+    const fname='Receipt_'+billName.replace(/[^a-zA-Z0-9]/g,'_')+'_'+billDate+(pendingReceiptMime==='application/pdf'?'.pdf':'.jpg');
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:500,
+        messages:[{role:'user',content:`Upload a receipt file named "${fname}" to a folder called "BillTrack/Receipts" in Google Drive. The file is base64 encoded: data:${pendingReceiptMime};base64,${pendingReceiptBase64}. Create the folder if it doesn't exist. Return ONLY JSON: {"fileId":"...","webViewLink":"..."}`}],
+        mcp_servers:[{type:'url',url:'https://drivemcp.googleapis.com/mcp/v1',name:'gdrive'}]
+      })
+    });
+    const data=await res.json();
+    const txt=data.content.map(i=>i.text||'').join('');
+    const clean=txt.replace(/```json|```/g,'').trim();
+    const match=clean.match(/\{[^}]*"webViewLink"[^}]*\}/);
+    if(match){
+      const parsed=JSON.parse(match[0]);
+      pendingReceiptBase64=null;pendingReceiptMime=null;pendingReceiptName=null;
+      return parsed.webViewLink||parsed.fileId||null;
+    }
+    return null;
+  }catch(e){
+    return null;
+  }
+}
+</script>
+</body>
+</html>
